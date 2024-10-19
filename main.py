@@ -1,6 +1,8 @@
 import discord
 import os
 from dotenv import load_dotenv
+from assets.help import help_embed
+from assets.game_embed import Embeds, Options
 
 load_dotenv()
 
@@ -61,13 +63,19 @@ async def start(interaction: discord.Interaction):
     async def select_callback(interaction: discord.Interaction):
         choice = select.values[0] 
         if choice == "option_1":
-            await interaction.response.send_message("Vous avez choisi de commencer une nouvelle partie !", ephemeral=True)
+            await startgame(user_allow, created_channel)
+            await interaction.response.defer(ephemeral=True)
         elif choice == "option_2":
             await interaction.response.send_message("Vous avez choisi de continuer une partie !", ephemeral=True)
         elif choice == "option_3":
-            await interaction.response.send_message("Vous avez choisi l'option d'aide !", ephemeral=True)
+            await interaction.user.send(help_embed)
+            await interaction.response.defer(ephemeral=True)
         elif choice == "option_4":
-            await interaction.response.send_message("Vous avez choisi de quitter le jeu.", ephemeral=True)
+            await interaction.channel.delete()
+            category_game = discord.utils.get(interaction.guild.categories, name='Game')
+            if category_game is not None:
+                if len(category_game.channels) == 0:
+                    await category_game.delete()
 
     select.callback = select_callback
 
@@ -80,10 +88,60 @@ async def start(interaction: discord.Interaction):
 
 @tree.command(name="help", description="Recevoir de l'aide")
 async def help(interaction: discord.Interaction):
-    await interaction.user.send("Besoin d'aide ?")
+    await interaction.user.send(help_embed)
     await interaction.response.send_message('Vous allez recevoir un message privé d\'ici peu !', ephemeral=True)
 
 
+async def startgame(user, channel): 
+    await channel.purge()
+    button = Options["spawn"]
+    view = discord.ui.View()
+    view.add_item(button[0])
+    await channel.send(embed=Embeds["spawn"], view=view)
+
+    async def game_callback(interaction: discord.Interaction):
+        button = Options["1"]
+        view = discord.ui.View()
+        view.add_item(button[0])
+        await interaction.response.send_message(embed=Embeds["1"], view=view)
+
+        async def game_callback(interaction: discord.Interaction):
+            button = Options["2"]
+            view = discord.ui.View()
+            view.add_item(button[0])
+            await interaction.response.send_message(embed=Embeds["2"], view=view)
+
+            async def game_callback(interaction: discord.Interaction):
+                button = Options["3"]
+                view = discord.ui.View()
+                view.add_item(button[0])
+                await interaction.response.send_message(embed=Embeds["3"], view=view)
+
+                async def game_callback(interaction: discord.Interaction):
+                    button = Options["4"]
+                    view = discord.ui.View()
+                    view.add_item(button[0])
+                    await interaction.response.send_message(embed=Embeds["4"], view=view)
+
+                    async def game_callback(interaction: discord.Interaction):
+                        button = Options["starting_fight"]
+                        view = discord.ui.View()
+                        view.add_item(button[0])
+                        await interaction.response.send_message(embed=Embeds["starting_fight"], view=view)
+
+                    button[0].callback = game_callback
+                button[0].callback = game_callback     
+            button[0].callback = game_callback
+        button[0].callback = game_callback
+    button[0].callback = game_callback
+
+
+
+
+
+
+
+    
 
 
 @client.event
@@ -92,12 +150,15 @@ async def on_message(message):
         return
 
     if message.content.startswith('$end'):
-        await message.channel.delete()
-        category_game = discord.utils.get(message.guild.categories, name='Game')
-        if category_game is not None:
-            if len(category_game.channels) == 0:
-                await category_game.delete()
+        if message.channel.category.name == 'Game':
+            await message.channel.delete()
+            category_game = discord.utils.get(message.guild.categories, name='Game')
+            if category_game is not None:
+                if len(category_game.channels) == 0:
+                    await category_game.delete()
 
 
 
 client.run(DISCORD_TOKEN)
+
+
