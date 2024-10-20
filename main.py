@@ -68,8 +68,8 @@ async def start(interaction: discord.Interaction):
     async def select_callback(interaction: discord.Interaction):
         choice = select.values[0] 
         if choice == "option_1":
-            await startgame(user_allow, created_channel)
             await interaction.response.defer(ephemeral=True)
+            await startgame(user_allow, created_channel)
         elif choice == "option_2":
             await interaction.response.send_message("Vous avez choisi de continuer une partie !", ephemeral=True)
         elif choice == "option_3":
@@ -91,67 +91,42 @@ async def start(interaction: discord.Interaction):
 
 
 
+async def startgame(user, channel):
+    await channel.send(embed=Embeds["spawn"])
+    
+    def check(m):
+        return m.author == user and m.content.lower() == 'suivant' or m.content.lower() == 's'
+
+    msg = await client.wait_for('message', check=check)
+    await channel.send(embed=Embeds["1"])
+
+    msg = await client.wait_for('message', check=check)
+    await channel.send(embed=Embeds["2"])
+
+    msg = await client.wait_for('message', check=check)
+    await channel.send(embed=Embeds["3"])
+
+    msg = await client.wait_for('message', check=check)
+    await channel.send(embed=Embeds["4"])
+
+    msg = await client.wait_for('message', check=check)
+    await channel.send(embed=Embeds["starting_fight"])
+
+    msg = await client.wait_for('message', check=check)
+
+    fight_embed = create_fight_embed(spawn_mob)
+    await channel.send(embed=fight_embed)
+
+
+
+
+
+
 @tree.command(name="help", description="Recevoir de l'aide")
 async def help(interaction: discord.Interaction):
     await interaction.user.send(help_embed)
     await interaction.response.send_message('Vous allez recevoir un message privé d\'ici peu !', ephemeral=True)
 
-
-async def startgame(user, channel): 
-    await channel.purge()
-    button = Options["spawn"]
-    view = discord.ui.View()
-    view.add_item(button[0])
-    await channel.send(embed=Embeds["spawn"], view=view)
-
-    async def game_callback(interaction: discord.Interaction):
-        button = Options["1"]
-        view = discord.ui.View()
-        view.add_item(button[0])
-        await interaction.response.send_message(embed=Embeds["1"], view=view)
-
-        async def game_callback(interaction: discord.Interaction):
-            button = Options["2"]
-            view = discord.ui.View()
-            view.add_item(button[0])
-            await interaction.response.send_message(embed=Embeds["2"], view=view)
-
-            async def game_callback(interaction: discord.Interaction):
-                button = Options["3"]
-                view = discord.ui.View()
-                view.add_item(button[0])
-                await interaction.response.send_message(embed=Embeds["3"], view=view)
-
-                async def game_callback(interaction: discord.Interaction):
-                    button = Options["4"]
-                    view = discord.ui.View()
-                    view.add_item(button[0])
-                    await interaction.response.send_message(embed=Embeds["4"], view=view)
-
-                    async def game_callback(interaction: discord.Interaction):
-                        button = Options["starting_fight"]
-                        view = discord.ui.View()
-                        view.add_item(button[0])
-                        await interaction.response.send_message(embed=Embeds["starting_fight"], view=view)
-                    
-                        async def game_callback(interaction: discord.Interaction):
-                            await fight(spawn_player, spawn_mob, interaction)
-
-
-                        button[0].callback = game_callback
-                    button[0].callback = game_callback
-                button[0].callback = game_callback     
-            button[0].callback = game_callback
-        button[0].callback = game_callback
-    button[0].callback = game_callback
-
-
-
-
-
-
-
-    
 
 
 @client.event

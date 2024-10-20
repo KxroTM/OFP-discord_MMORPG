@@ -6,28 +6,29 @@ def create_fight_embed(mob):
         title="**Survie : **",
         description=f"**{mob.name}** vous attaque !", 
         color=0x055a28
-    ).set_image(url=mob.image)
+    ).set_image(url=mob.image).set_footer(text='"a" pour attaquer, "i" pour ouvrir l\'inventaire, "f" pour fuir')
 
-    options = [
-        discord.ui.Button(label="Attaquer", style=discord.ButtonStyle.green, custom_id="option_1"),
-        discord.ui.Button(label="Inventaire", style=discord.ButtonStyle.green, custom_id="option_2"),
-        discord.ui.Button(label="Fuir", style=discord.ButtonStyle.red, custom_id="option_3"),
-    ]
-
-    return fight_embed, options
+    return fight_embed
 
 
 
-async def fight(user, mob,interaction):
+async def fight(user, mob,channel,client):
     while user.hp > 0 and mob.hp > 0:
-        fight_embed, options = create_fight_embed(mob)
-        view = discord.ui.View()
-        for option in options:
-            view.add_item(option)
-        message = await interaction.response.send_message(embed=fight_embed,  view=view)
+        fight_embed = create_fight_embed(mob)
+        await channel.send(embed=fight_embed)
+        def check(m):
+            return m.author == user and (m.content.lower() == 'a' or m.content.lower() == 'i' or m.content.lower() == 'f')
+        msg = await client.wait_for('message', check=check)
 
-        options[0].callback = user.attack(mob)
-        options[1].callback = user.use_inventory()
-        options[2].callback = user.flee(mob)
+        if msg.content == 'a':
+            user.attack(mob)
+        elif msg.content == 'i':
+            await user.open_inventory(channel)
+        elif msg.content == 'f':
+            if await user.flee(mob):
+                await channel.send("Vous avez fui le combat")
+                break
+            else:
+                await channel.send("Vous n'avez pas réussi à fuir")
 
-        await mob.attack(user)
+        mob.attack(user)
