@@ -18,14 +18,16 @@ def create_fight_embed(mob):
 
 
 
-async def fight_callback(interaction: discord.Interaction, mob):
-    choice = interaction.custom_id
-    if choice == "option_1":
-        await interaction.response.send_message("Vous avez choisi d'attaquer !", ephemeral=True)
-    elif choice == "option_2":
-        await interaction.response.send_message("Vous avez choisi d'ouvrir votre inventaire !", ephemeral=True)
-    elif choice == "option_3":
-        await interaction.response.send_message("Vous avez choisi de fuir !", ephemeral=True)
-    else:
-        await interaction.response.send_message("Vous avez choisi de ne rien faire !", ephemeral=True)
-    return
+async def fight(user, mob,interaction):
+    while user.hp > 0 and mob.hp > 0:
+        fight_embed, options = create_fight_embed(mob)
+        view = discord.ui.View()
+        for option in options:
+            view.add_item(option)
+        message = await interaction.response.send_message(embed=fight_embed,  view=view)
+
+        options[0].callback = user.attack(mob)
+        options[1].callback = user.use_inventory()
+        options[2].callback = user.flee(mob)
+
+        await mob.attack(user)

@@ -1,17 +1,22 @@
 import discord
-import os
-from dotenv import load_dotenv
-from assets.help import help_embed
-from assets.game_embed import Embeds, Options
-
-load_dotenv()
 
 intents = discord.Intents.default()
 intents.message_content = True
+client = discord.Client(intents=intents)
+
+
+import os
+from dotenv import load_dotenv
+from assets.help import *
+from assets.game_embed import *
+from assets.fight import *
+from assets.object.spawn import *
+
+load_dotenv()
+
 
 DISCORD_TOKEN = os.getenv("BOT_TOKEN")
 
-client = discord.Client(intents=intents)
 tree = discord.app_commands.CommandTree(client)
 
 @client.event
@@ -128,7 +133,12 @@ async def startgame(user, channel):
                         view = discord.ui.View()
                         view.add_item(button[0])
                         await interaction.response.send_message(embed=Embeds["starting_fight"], view=view)
+                    
+                        async def game_callback(interaction: discord.Interaction):
+                            await fight(spawn_player, spawn_mob, interaction)
 
+
+                        button[0].callback = game_callback
                     button[0].callback = game_callback
                 button[0].callback = game_callback     
             button[0].callback = game_callback
