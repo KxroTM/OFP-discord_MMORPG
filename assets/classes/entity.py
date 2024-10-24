@@ -18,19 +18,19 @@ class player(entity) :
         self.inventory = inventory
 
 
-    async def attack(self, target) :
+    def attack(self, target) :
         damage = self.atk - target.defense
         target.hp -= damage
 
 
-    async def flee(self, target) :
+    def flee(self, target) :
         chance = 100 - target.focus
         if random.randint(1, 100) <= chance :
             return True
         else :
             return False
 
-    async def use_inventory(self) :
+    def use_inventory(self) :
         pass
 
 class mob(entity) :
@@ -39,6 +39,6 @@ class mob(entity) :
         self.focus = focus
         self.image = image
 
-    async def attack(self, target) :
+    def attack(self, target) :
         damage = self.atk - target.defense
         target.hp -= damage
