@@ -1,5 +1,8 @@
+# spawn.py
+
 from assets.classes.entity import player, mob
 from assets.classes.inventory import inventory
+from assets.object.ascii import spawn_monster
 
 spawn_player = player(
     name = "Player",
@@ -10,7 +13,9 @@ spawn_player = player(
     level=1,
     inventory= inventory(
         items=[]
-    )
+    ),
+    crit_rate=10,
+    crit_dmg=1,
 )
 
 spawn_mob = mob(
@@ -20,5 +25,7 @@ spawn_mob = mob(
     defense=0,
     level=1,
     focus=100,
-    image="https://c.tenor.com/EOlZo1vc8lcAAAAC/tenor.gif"
+    image=spawn_monster,
+    crit_rate=30,
+    crit_dmg=2,
 )
