@@ -199,8 +199,9 @@ collision_village_spawn_map = ["🌲","🧙","🌱","💼"]
 village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
 
 def village_spawn() :
-    global player_pos, tp_pos, tp_pos2, Alberic_pos
+    global player_pos, tp_pos, tp_pos2, Alberic_pos, Player
     player_pos = [15, 11]
+    Player = spawn_player
     tp_pos = [[4,0], [5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0],[12,0]]
     tp_pos2 = [[0,10], [0,11], [0,12]]
     village_spawn_map[player_pos[0]][player_pos[1]] = " O"
@@ -214,12 +215,12 @@ def village_spawn() :
             deplacer_joueur(key, village_spawn_map,collision_village_spawn_map)
 
             if (village_spawn_map[Alberic_pos[0]-1][Alberic_pos[1]] == village_spawn_map[player_pos[0]][player_pos[1]] or village_spawn_map[Alberic_pos[0]+1][Alberic_pos[1]] == village_spawn_map[player_pos[0]][player_pos[1]] or village_spawn_map[Alberic_pos[0]][Alberic_pos[1]-1] == village_spawn_map[player_pos[0]][player_pos[1]] or village_spawn_map[Alberic_pos[0]][Alberic_pos[1]+1] == village_spawn_map[player_pos[0]][player_pos[1]]) and key == "e":
-                Alberic_dialog("village_spawn_map")
-                pygame.mixer.music.stop()
-                pygame.mixer.music.load("./src/audio/spawn.wav")
-                pygame.mixer.music.play(-1, 3.0)
-                pygame.mixer.music.set_volume(0.2)
                 if Player == spawn_player:
+                    Alberic_dialog("village_spawn_map")
+                    pygame.mixer.music.stop()
+                    pygame.mixer.music.load("./src/audio/spawn.wav")
+                    pygame.mixer.music.play(-1, 3.0)
+                    pygame.mixer.music.set_volume(0.2)
                     for i in range(3):
                         afficher_carte(village_spawn_map)
                         key = msvcrt.getch().decode('utf-8')
@@ -235,6 +236,8 @@ def village_spawn() :
                     pygame.mixer.music.load("./src/audio/spawn.wav")
                     pygame.mixer.music.play(-1, 3.0)
                     pygame.mixer.music.set_volume(0.2)
+                else:
+                    Alberic_dialog("village_spawn_map2")
             
             if village_spawn_map[player_pos[0]][player_pos[1]+1]=="🌱" and key == "e":
                 if Player == spawn_player:

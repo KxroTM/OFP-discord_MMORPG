@@ -23,8 +23,13 @@ def Alberic_dialog(map_name):
             "Alberic: Bon courage à toi, aventurier..",
             "Alberic: Tu en auras besoin.."
         ]
-    
-
+    elif map_name == "village_spawn_map2" :
+        dialog = [
+            "Alberic: Tu es encore là..",
+            "Alberic: Je te conseille d'aller te diriger à l'ouest",
+            "Alberic: N'oublie pas ce que je t'ai dit..",
+            "Alberic: Hahahahaha..",
+        ]
 
     os.system('cls' if os.name == 'nt' else 'clear')
     for i in range(0, (len(dialog))):
