@@ -11,9 +11,7 @@ spawn_player = player(
     defense=0,
     xp=0,
     level=1,
-    inventory= inventory(
-        items=[]
-    ),
+    inventory= inventory(),
     crit_rate=10,
     crit_dmg=1,
 )
