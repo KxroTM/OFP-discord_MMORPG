@@ -7,7 +7,7 @@ import time
 from assets.event.fight import fight
 from assets.event.game_state import gameoverscreen
 from assets.object.spawn import spawn_mob, spawn_player
-from assets.event.game_dialog import Alberic_dialog
+from assets.event.game_dialog import Alberic_dialog, Alberic_player_intro
 
 global Player
 Player = spawn_player
@@ -37,7 +37,6 @@ player_pos = [10, 11]
 spawn_map[player_pos[0]][player_pos[1]] = " O"
 monster_pos = None
 monster_defait = False
-tp_pos = [0, 11] 
 
 def afficher_carte(map):
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -66,7 +65,7 @@ def deplacer_joueur(direction,map,collision):
 
         if player_pos[0] == 7 and monster_pos == None and monster_defait == False:
             monster_pos = [3, 11]
-            map[monster_pos[0]][monster_pos[1]] = emoji.emojize(":troll: ")
+            map[monster_pos[0]][monster_pos[1]] = emoji.emojize("🧟 ")
 
 def deplacer_monstre():
     global monster_pos
@@ -82,26 +81,40 @@ def deplacer_monstre():
         elif monster_pos[1] > player_pos[1]:  # Aller à gauche
             monster_pos[1] -= 1
 
-        spawn_map[monster_pos[0]][monster_pos[1]] = emoji.emojize(":troll: ")
+        spawn_map[monster_pos[0]][monster_pos[1]] = emoji.emojize("🧟 ")
+
+def deplacer_Alberic():
+    global Alberic_pos
+    if Alberic_pos:
+        village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "  "  
+
+        if Alberic_pos[0] < player_pos[0]:  # Descendre
+            Alberic_pos[0] += 1
+        elif Alberic_pos[0] > player_pos[0]:  # Monter
+            Alberic_pos[0] -= 1
+        if Alberic_pos[1] < player_pos[1]:  # Aller à droite
+            Alberic_pos[1] += 1
+        elif Alberic_pos[1] > player_pos[1]:  # Aller à gauche
+            Alberic_pos[1] -= 1
+
+        village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
 
 
 def spawn() :
-    global monster_pos
-    global monster_defait
+    global monster_pos, monster_defait, player_pos, tp_pos
+    tp_pos = [[0,9],[0,10],[0, 11],[0,12],[0,13]]
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load("./src/audio/spawn.wav")
+    pygame.mixer.music.play(-1, 3.0)
+    pygame.mixer.music.set_volume(0.2)
     while True:
-        pygame.init()
-        pygame.mixer.init()
-        pygame.mixer.music.load("./src/audio/spawn.wav")
-        pygame.mixer.music.play(-1, 3.0)
-        pygame.mixer.music.set_volume(0.2)
         afficher_carte(spawn_map)
-        while monster_pos != player_pos and tp_pos != player_pos:
-            afficher_carte(spawn_map)
-            key = msvcrt.getch().decode('utf-8')
-            if key == 'm':
-                exit()
-            deplacer_joueur(key, spawn_map,collision_spawn_map)
-            deplacer_monstre()
+        key = msvcrt.getch().decode('utf-8')
+        if key == 'm':
+            exit()
+        deplacer_joueur(key, spawn_map,collision_spawn_map)
+        deplacer_monstre()
         if monster_pos == player_pos:
             pygame.mixer.music.stop()
             fight(spawn_player, spawn_mob)
@@ -113,9 +126,11 @@ def spawn() :
                 monster_defait = True
                 monster_pos = None
                 afficher_carte(spawn_map)
-                continue
+                pygame.mixer.music.load("./src/audio/spawn.wav")
+                pygame.mixer.music.play(-1, 3.0)
+                pygame.mixer.music.set_volume(0.2)
 
-        if tp_pos == player_pos:
+        if player_pos in tp_pos:
             spawn_nextmap()
             
 
@@ -143,22 +158,21 @@ def spawn_nextmap() :
     global player_pos, tp_pos
     player_pos = [16, 11]
     spawn_next_map[player_pos[0]][player_pos[1]] = " O"
-    tp_pos = [0, 11]
+    tp_pos = [[0,9],[0,10],[0, 11],[0,12],[0,13]]
     while True:
         afficher_carte(spawn_next_map)
-        while tp_pos != player_pos:
-            afficher_carte(spawn_next_map)
-            key = msvcrt.getch().decode('utf-8')
-            if key == 'm':
-                quit()
-            deplacer_joueur(key, spawn_next_map,collision_spawn_map)
+        afficher_carte(spawn_next_map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == 'm':
+            quit()
+        deplacer_joueur(key, spawn_next_map,collision_spawn_map)
 
-        if player_pos == tp_pos:
+        if player_pos in tp_pos:
             village_spawn()
 
 
 
-
+Alberic_pos = [7, 10]
 
 
 village_spawn_map = [           # 23x16 
@@ -169,7 +183,7 @@ village_spawn_map = [           # 23x16
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "💼", "🌲", "🌲"],
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "  ", "🌲", "🌲"],
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "  ", "🌲", "🌲"],
-    [" ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "🧙‍♂️","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "  ", "🌲", "🌲"],
+    [" ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "  ", "🌲", "🌲"],
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "  ", "🌲", "🌲"],
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "🌲", "🌲","🌲", "  ", "🌲", "🌲"],
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "🌲", "🌲","🌲", "  ", "🌲", "🌲"],
@@ -181,13 +195,14 @@ village_spawn_map = [           # 23x16
     ["🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲", "  ", "  ","  ","  ", "  ", "🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲"],
 ]
 
-collision_village_spawn_map = ["🌲","🧙‍♂️","🌱","💼"]
+collision_village_spawn_map = ["🌲","🧙","🌱","💼"]
+village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
 
 def village_spawn() :
-    global player_pos, tp_pos, tp_pos2
+    global player_pos, tp_pos, tp_pos2, Alberic_pos
     player_pos = [15, 11]
-    tp_pos = [[0, 4], [0, 5],[0,6],[0,7],[0,8],[0,9],[0,10],[0,11],[0,12]]
-    tp_pos2 = [[10, 0], [11, 0], [12, 0]]
+    tp_pos = [[4,0], [5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0],[12,0]]
+    tp_pos2 = [[0,10], [0,11], [0,12]]
     village_spawn_map[player_pos[0]][player_pos[1]] = " O"
     while True:
         afficher_carte(village_spawn_map)
@@ -198,13 +213,28 @@ def village_spawn() :
                 exit()
             deplacer_joueur(key, village_spawn_map,collision_village_spawn_map)
 
-            if (village_spawn_map[player_pos[0]-1][player_pos[1]] == "🧙‍♂️" or village_spawn_map[player_pos[0]+1][player_pos[1]] == "🧙‍♂️" or village_spawn_map[player_pos[0]][player_pos[1]-1] == "🧙‍♂️" or village_spawn_map[player_pos[0]][player_pos[1]+1] == "🧙‍♂️") and key == "e":
+            if (village_spawn_map[Alberic_pos[0]-1][Alberic_pos[1]] == village_spawn_map[player_pos[0]][player_pos[1]] or village_spawn_map[Alberic_pos[0]+1][Alberic_pos[1]] == village_spawn_map[player_pos[0]][player_pos[1]] or village_spawn_map[Alberic_pos[0]][Alberic_pos[1]-1] == village_spawn_map[player_pos[0]][player_pos[1]] or village_spawn_map[Alberic_pos[0]][Alberic_pos[1]+1] == village_spawn_map[player_pos[0]][player_pos[1]]) and key == "e":
                 Alberic_dialog("village_spawn_map")
                 pygame.mixer.music.stop()
                 pygame.mixer.music.load("./src/audio/spawn.wav")
                 pygame.mixer.music.play(-1, 3.0)
                 pygame.mixer.music.set_volume(0.2)
-                os.system('cls' if os.name == 'nt' else 'clear')
+                if Player == spawn_player:
+                    for i in range(3):
+                        afficher_carte(village_spawn_map)
+                        key = msvcrt.getch().decode('utf-8')
+                        if key == 'm':
+                            exit()
+                        deplacer_joueur(key, village_spawn_map,collision_village_spawn_map)
+                    for i in range(2):
+                        deplacer_Alberic()
+                        afficher_carte(village_spawn_map)
+                        time.sleep(1)
+                    Player = Alberic_player_intro()
+                    pygame.mixer.music.stop()
+                    pygame.mixer.music.load("./src/audio/spawn.wav")
+                    pygame.mixer.music.play(-1, 3.0)
+                    pygame.mixer.music.set_volume(0.2)
             
             if village_spawn_map[player_pos[0]][player_pos[1]+1]=="🌱" and key == "e":
                 if Player == spawn_player:
