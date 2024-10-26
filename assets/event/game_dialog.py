@@ -8,7 +8,7 @@ from assets.object.items import Carte
 
 
 def Alberic_dialog(map_name):
-    pygame.mixer.stop()
+    pygame.mixer.init()
     pygame.mixer.music.load("./src/audio/speaking.wav")
     pygame.mixer.music.play(-1, 3.0)
     pygame.mixer.music.set_volume(0.2)

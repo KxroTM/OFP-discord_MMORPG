@@ -34,7 +34,6 @@ spawn_map = [           # 23x16
 ]
 collision_spawn_map = ["🌲"]
 
-
 player_pos = [10, 11]
 spawn_map[player_pos[0]][player_pos[1]] = " O"
 monster_pos = None
@@ -101,7 +100,6 @@ def deplacer_Alberic():
 
         village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
 
-
 def spawn() :
     global monster_pos, monster_defait, player_pos, tp_pos
     tp_pos = [[0,9],[0,10],[0, 11],[0,12],[0,13]]
@@ -133,8 +131,7 @@ def spawn() :
                 pygame.mixer.music.set_volume(0.2)
 
         if player_pos in tp_pos:
-            spawn_nextmap()
-            
+            spawn_nextmap()           
 
 spawn_next_map = [           # 23x16
     ["🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲", "  ", "  ","  ","  ", "  ", "🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲"],
@@ -172,11 +169,6 @@ def spawn_nextmap() :
         if player_pos in tp_pos:
             village_spawn()
 
-
-
-Alberic_pos = [7, 10]
-
-
 village_spawn_map = [           # 23x16 
     ["🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲",  "🌲", "  ","  ","  ",  "🌲", "🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲"],
     ["🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲", "  ", "  ","  ","  ", "  ", "🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲"],
@@ -185,7 +177,7 @@ village_spawn_map = [           # 23x16
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "💼", "🌲", "🌲"],
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "  ", "🌲", "🌲"],
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "  ", "🌲", "🌲"],
-    [" ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "  ", "🌲", "🌲"],
+    ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "  ", "🌲", "🌲"],
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "  ", "🌲","🌲", "  ", "🌲", "🌲"],
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "🌲", "🌲","🌲", "  ", "🌲", "🌲"],
     ["  ", "  ", "  ", "  ", "  ","  ", "  ", "  ", "  ", "  ", "  ","  ","  ", "  ", "  ", "  ", "  ", "🌲", "🌲","🌲", "  ", "🌲", "🌲"],
@@ -197,16 +189,19 @@ village_spawn_map = [           # 23x16
     ["🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲", "  ", "  ","  ","  ", "  ", "🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲"],
 ]
 
-collision_village_spawn_map = ["🌲","🧙","🌱","💼"]
-village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
+collision_village_spawn_map = ["🌲","🧙","🌱","💼","📜"]
 
 def village_spawn() :
     global player_pos, tp_pos, tp_pos2, Alberic_pos, Player
     player_pos = [15, 11]
+    Alberic_pos = [7, 10]
     Player = spawn_player
     tp_pos = [[4,0], [5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0],[12,0]]
     tp_pos2 = [[0,10], [0,11], [0,12]]
+    village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
     village_spawn_map[player_pos[0]][player_pos[1]] = " O"
+    tombe_pos = [5,17]
+    village_spawn_map[tombe_pos[0]][tombe_pos[1]] = "📜"
     while True:
         afficher_carte(village_spawn_map)
         while True:
@@ -226,7 +221,6 @@ def village_spawn() :
             if (village_spawn_map[Alberic_pos[0]-1][Alberic_pos[1]] == village_spawn_map[player_pos[0]][player_pos[1]] or village_spawn_map[Alberic_pos[0]+1][Alberic_pos[1]] == village_spawn_map[player_pos[0]][player_pos[1]] or village_spawn_map[Alberic_pos[0]][Alberic_pos[1]-1] == village_spawn_map[player_pos[0]][player_pos[1]] or village_spawn_map[Alberic_pos[0]][Alberic_pos[1]+1] == village_spawn_map[player_pos[0]][player_pos[1]]) and key == Controls["interact"]:
                 if Player == spawn_player:
                     Alberic_dialog("village_spawn_map")
-                    pygame.mixer.music.stop()
                     pygame.mixer.music.load("./src/audio/spawn.wav")
                     pygame.mixer.music.play(-1, 3.0)
                     pygame.mixer.music.set_volume(0.2)
@@ -262,10 +256,33 @@ def village_spawn() :
                 else:
                     print("Vous n'avez pas d'objet pour couper cette arbuste")
                     time.sleep(1)
-            
+
+            if village_spawn_map[player_pos[0]-1][player_pos[1]]=="💼" and key == Controls["interact"]:
+                print("Vous avez trouvé une carte")
+                time.sleep(1)
+
+            if (village_spawn_map[tombe_pos[0]-1][tombe_pos[1]]==village_spawn_map[player_pos[0]][player_pos[1]]or village_spawn_map[tombe_pos[0]+1][tombe_pos[1]]==village_spawn_map[player_pos[0]][player_pos[1]]or village_spawn_map[tombe_pos[0]][tombe_pos[1]+1]==village_spawn_map[player_pos[0]][player_pos[1]]) and key == Controls["interact"]:
+                print("Il y a un panneau devant vous, voulez vous le lire ? (y/n)")
+                if input() == "y":
+                    print("") # LORE A RACONTER ICI AVEC CONDITION CONTINUER DE LIRE 
+                    time.sleep(1)
+
+
             if player_pos in tp_pos:
-                print("Vous avez trouvé un passage secret vers la map suivante") 
-                time.sleep(1)               
+                if Player == spawn_player:
+                    afficher_carte(village_spawn_map)
+                    print("Il est encore trop tôt pour partir")   
+                    time.sleep(1)
+                    village_spawn_map[player_pos[0]][player_pos[1]] = "  "
+                    player_pos = [player_pos[0], player_pos[1]+1]
+                    village_spawn_map[player_pos[0]][player_pos[1]] = " O"
+                    afficher_carte(village_spawn_map)       
             if  player_pos in tp_pos2:
-                print("Vous avez trouvé un passage secret") 
-                time.sleep(1)               
+                if Player == spawn_player:
+                    afficher_carte(village_spawn_map)
+                    print("Il est encore trop tôt pour partir")           
+                    time.sleep(1)
+                    village_spawn_map[player_pos[0]][player_pos[1]] = "  "
+                    player_pos = [player_pos[0]+1,player_pos[1]]
+                    village_spawn_map[player_pos[0]][player_pos[1]] = " O"
+                    afficher_carte(village_spawn_map)
