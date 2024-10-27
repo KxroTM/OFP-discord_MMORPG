@@ -1,6 +1,43 @@
 # inventory.py
 import time
 import os
+import msvcrt
+
+def move_in_inventory(items) :
+    os.system('cls' if os.name == 'nt' else 'clear')
+    if len(items) == 0 :
+        print("Votre inventaire est vide")
+        time.sleep(1)
+        return
+    else :
+        def afficher_inventaire(items, key) :
+            os.system('cls' if os.name == 'nt' else 'clear')
+            cursor = [0,1]
+            for i in range(len(items)) :
+                map = [[items[i].name, " "] for i in range(len(items))]
+            
+            map[cursor[0]][cursor[1]] = "<"
+
+            print("Inventaire :\n\n\n")
+            for i in range(len(map)) :
+                print(map[i][0] + "   " + map[i][1])
+
+            print("\n\n\nAppuyez sur 'i' pour quitter l'inventaire")
+
+            if key == "z" and cursor[0] > 0 :
+                cursor[0] -= 1
+            elif key == "s" and cursor[0] < len(items) - 1 :
+                cursor[0] += 1
+            elif key == "e" :
+                items[cursor[0]].use()
+
+            
+    afficher_inventaire(items,"")
+    while True:
+        key = msvcrt.getch().decode('utf-8')
+        afficher_inventaire(items, key)
+        if key == "i":
+            return
 
 class inventory :
     
@@ -21,12 +58,7 @@ class inventory :
             time.sleep(1)
 
     def show(self) :
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print("Inventaire :")
-        for item in self.items :
-            print(item.name + " : " + item.description)
-        input("Entrer pour continuer..")
-        os.system('cls' if os.name == 'nt' else 'clear')
+        move_in_inventory(self.items)
 
 
 class item :
