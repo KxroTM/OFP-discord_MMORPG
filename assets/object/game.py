@@ -3,6 +3,7 @@ import os
 import msvcrt
 import emoji
 import pygame
+import random
 import time
 from assets.event.fight import fight
 from assets.event.game_state import gameoverscreen
@@ -99,6 +100,33 @@ def deplacer_Alberic():
             Alberic_pos[1] -= 1
 
         village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
+
+def rdm_fight(taux_spawn): # A CHANGER LES MOBS
+    rdm = random.randint(1, taux_spawn) 
+    if rdm == 1:
+        mob = random.randint(1, 4)
+        if mob == 1:
+            fight(spawn_player, spawn_mob)
+            if spawn_player.hp <= 0:
+                gameoverscreen()
+                quit()
+        elif mob == 2:
+            fight(spawn_player, spawn_mob)
+            if spawn_player.hp <= 0:
+                gameoverscreen()
+                quit()
+        elif mob == 3:
+            fight(spawn_player, spawn_mob)
+            if spawn_player.hp <= 0:
+                gameoverscreen()
+                quit()
+        elif mob == 4:
+            fight(spawn_player, spawn_mob)
+            if spawn_player.hp <= 0:
+                gameoverscreen()
+                quit()
+    
+
 
 def spawn() :
     global monster_pos, monster_defait, player_pos, tp_pos

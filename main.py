@@ -1,5 +1,5 @@
 from assets.event.introduction import intro
-from assets.object.maps import village_spawn
+from assets.object.game import village_spawn
 import argparse
 
 

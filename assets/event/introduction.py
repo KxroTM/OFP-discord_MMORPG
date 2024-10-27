@@ -3,7 +3,7 @@
 import time
 import os
 import keyboard
-from assets.object.maps import spawn
+from assets.object.game import spawn
 
 
 def intro(vitesse=0.13):

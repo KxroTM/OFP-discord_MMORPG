@@ -77,12 +77,12 @@ def Alberic_player_intro():
     Player = player(
         name = username,
         hp=15,
-        atk=3,
+        atk=2,
         defense=0,
         xp=0,
         level=1,
         inventory= inventory(),
-        crit_rate=10,
+        crit_rate=5,
         crit_dmg=2,
     )
 
