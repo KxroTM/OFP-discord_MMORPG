@@ -11,6 +11,7 @@ from assets.object.spawn import spawn_mob, spawn_player
 from assets.event.game_dialog import Alberic_dialog, Alberic_player_intro
 from assets.object.items import Carte
 from assets.play.controls import Controls
+from assets.play.utils import move_in_pause_menu
 
 global Player
 Player = spawn_player
@@ -90,14 +91,35 @@ def deplacer_Alberic():
     if Alberic_pos:
         village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "  "  
 
-        if Alberic_pos[0] < player_pos[0]:  # Descendre
+        # gestion des diagonales
+        if Alberic_pos[0] < player_pos[0] and Alberic_pos[1] < player_pos[1]:  # si le joueur est en bas à droite de Alberic
             Alberic_pos[0] += 1
-        elif Alberic_pos[0] > player_pos[0]:  # Monter
+            village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
+            return
+        elif Alberic_pos[0] < player_pos[0] and Alberic_pos[1] > player_pos[1]:  # si le joueur est en bas à gauche de Alberic
+            Alberic_pos[0] += 1
+            village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
+            return
+        elif Alberic_pos[0] > player_pos[0] and Alberic_pos[1] < player_pos[1]:  # si le joueur est en haut à droite de Alberic
             Alberic_pos[0] -= 1
-        if Alberic_pos[1] < player_pos[1]:  # Aller à droite
+            village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
+            return
+        elif Alberic_pos[0] > player_pos[0] and Alberic_pos[1] > player_pos[1]:  # si le joueur est en haut à gauche de Alberic
+            Alberic_pos[0] -= 1
+            village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
+            return
+
+        if Alberic_pos[0] < player_pos[0]:  # si le joueur est en dessous de Alberic
+            Alberic_pos[0] += 1
+        elif Alberic_pos[0] > player_pos[0]:  # si le joueur est au dessus de Alberic
+            Alberic_pos[0] -= 1
+        if Alberic_pos[1] < player_pos[1]:  # si le joueur est à droite
             Alberic_pos[1] += 1
-        elif Alberic_pos[1] > player_pos[1]:  # Aller à gauche
+        elif Alberic_pos[1] > player_pos[1]:  # si le joueur est à gauche
             Alberic_pos[1] -= 1
+        
+
+        
 
         village_spawn_map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
 
@@ -236,7 +258,7 @@ def village_spawn() :
             afficher_carte(village_spawn_map)
             key = msvcrt.getch().decode('utf-8')
             if key == Controls["exit"]:
-                exit()
+                move_in_pause_menu()
             if key == Controls["map"]:
                 Player.inventory.use(Carte)
                 afficher_carte(village_spawn_map)
@@ -256,7 +278,7 @@ def village_spawn() :
                         afficher_carte(village_spawn_map)
                         key = msvcrt.getch().decode('utf-8')
                         if key == Controls["exit"]:
-                            exit()
+                            move_in_pause_menu()
                         deplacer_joueur(key, village_spawn_map,collision_village_spawn_map)
                     while (village_spawn_map[Alberic_pos[0]-1][Alberic_pos[1]] != village_spawn_map[player_pos[0]][player_pos[1]] and village_spawn_map[Alberic_pos[0]+1][Alberic_pos[1]] != village_spawn_map[player_pos[0]][player_pos[1]] and village_spawn_map[Alberic_pos[0]][Alberic_pos[1]-1] != village_spawn_map[player_pos[0]][player_pos[1]] and village_spawn_map[Alberic_pos[0]][Alberic_pos[1]+1] != village_spawn_map[player_pos[0]][player_pos[1]]):
                         deplacer_Alberic()
@@ -289,7 +311,7 @@ def village_spawn() :
                 print("Vous avez trouvé une carte")
                 time.sleep(1)
 
-            if (village_spawn_map[tombe_pos[0]-1][tombe_pos[1]]==village_spawn_map[player_pos[0]][player_pos[1]]or village_spawn_map[tombe_pos[0]+1][tombe_pos[1]]==village_spawn_map[player_pos[0]][player_pos[1]]or village_spawn_map[tombe_pos[0]][tombe_pos[1]+1]==village_spawn_map[player_pos[0]][player_pos[1]]) and key == Controls["interact"]:
+            if (village_spawn_map[tombe_pos[0]-1][tombe_pos[1]]==village_spawn_map[player_pos[0]][player_pos[1]]or village_spawn_map[tombe_pos[0]+1][tombe_pos[1]]==village_spawn_map[player_pos[0]][player_pos[1]]or village_spawn_map[tombe_pos[0]][tombe_pos[1]-1]==village_spawn_map[player_pos[0]][player_pos[1]]) and key == Controls["interact"]:
                 print("Il y a un panneau devant vous, voulez vous le lire ? (y/n)")
                 if input() == "y":
                     print("") # LORE A RACONTER ICI AVEC CONDITION CONTINUER DE LIRE 

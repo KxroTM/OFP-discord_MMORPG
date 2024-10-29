@@ -55,7 +55,7 @@ def Alberic_player_intro():
     dialog2 = [
         "Alberic: C'est donc toi.. ",
         "Alberic: Pour t'aider durant ton aventure, je vais te donner un objet qui te sera utile..",
-        "*Alberic vous a donner une carte, pour pouvoir l'utiliser appuyez sur i*",
+        "\033[1m\033[3mAlberic vous a donner une carte, pour pouvoir l'utiliser appuyez sur m\033[0m\033[0m",
         "Alberic: Je te laisse maintenant",
         "Alberic: On se reverra peut-être..",
     ]

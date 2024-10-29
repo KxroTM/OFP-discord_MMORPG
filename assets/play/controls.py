@@ -6,5 +6,6 @@ Controls= {
     "interact":"e",
     "map":"m",
     "inventory":"i",
-    "exit":"escape"
+    "exit":'\x1b',
 }
+

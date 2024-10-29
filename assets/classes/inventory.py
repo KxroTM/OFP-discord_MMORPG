@@ -30,8 +30,8 @@ def move_in_inventory(items) :
                 cursor[0] += 1
             elif key == "e" :
                 items[cursor[0]].use()
+                afficher_inventaire(items, "")
 
-            
     afficher_inventaire(items,"")
     while True:
         key = msvcrt.getch().decode('utf-8')
@@ -82,3 +82,5 @@ class carte(item) :
         print("Vous pouvez également voir les zones que vous n'avez pas encore visité")
         input("Entrer pour continuer..")
         os.system('cls' if os.name == 'nt' else 'clear')
+
+
