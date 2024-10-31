@@ -19,5 +19,5 @@
     Use 'e' to interact
     Use 'i' to open the inventory
     Use 'm' to open the map
-    Press 'x' to quit the game
+    Press 'esc' to open the pause menu
 ```
