@@ -34,12 +34,7 @@ spawn_map = [           # 23x16
     ["🌲", "🌲", "🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲","🌲", "🌲", "🌲", "🌲", "🌲", "🌲", "🌲"],
     ["🌲", "🌲", "🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲", "🌲", "🌲", "🌲", "🌲","🌲","🌲", "🌲", "🌲", "🌲", "🌲", "🌲", "🌲"], 
 ]
-collision_spawn_map = ["🌲"]
 
-player_pos = [10, 11]
-spawn_map[player_pos[0]][player_pos[1]] = " O"
-monster_pos = None
-monster_defait = False
 
 def afficher_carte(map):
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -66,9 +61,10 @@ def deplacer_joueur(direction,map,collision):
         player_pos = new_pos
         map[player_pos[0]][player_pos[1]] = " O"
 
-        if player_pos[0] == 7 and monster_pos == None and monster_defait == False:
-            monster_pos = [3, 11]
-            map[monster_pos[0]][monster_pos[1]] = emoji.emojize("🧟 ")
+        if map == spawn_map:
+            if player_pos[0] == 7 and monster_pos == None and monster_defait == False:
+                monster_pos = [3, 11]
+                map[monster_pos[0]][monster_pos[1]] = emoji.emojize("🧟 ")
 
 def deplacer_monstre():
     global monster_pos
@@ -147,11 +143,14 @@ def rdm_fight(taux_spawn): # A CHANGER LES MOBS
             if spawn_player.hp <= 0:
                 gameoverscreen()
                 quit()
-    
-
 
 def spawn() :
     global monster_pos, monster_defait, player_pos, tp_pos
+    collision_spawn_map = ["🌲"]
+    player_pos = [10, 11]
+    spawn_map[player_pos[0]][player_pos[1]] = " O"
+    monster_pos = None
+    monster_defait = False
     tp_pos = [[0,9],[0,10],[0, 11],[0,12],[0,13]]
     pygame.init()
     pygame.mixer.init()
@@ -239,10 +238,9 @@ village_spawn_map = [           # 23x16
     ["🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲", "  ", "  ","  ","  ", "  ", "🌲", "🌲", "🌲", "🌲", "🌲","🌲", "🌲", "🌲", "🌲"],
 ]
 
-collision_village_spawn_map = ["🌲","🧙","🌱","💼","📜"]
-
 def village_spawn() :
     global player_pos, tp_pos, tp_pos2, Alberic_pos, Player
+    collision_village_spawn_map = ["🌲","🧙","🌱","💼","📜"]
     player_pos = [15, 11]
     Alberic_pos = [7, 10]
     Player = spawn_player
