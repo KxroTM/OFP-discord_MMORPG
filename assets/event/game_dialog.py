@@ -12,7 +12,7 @@ def Alberic_dialog(map_name):
     pygame.mixer.music.load("./src/audio/speaking.wav")
     pygame.mixer.music.play(-1, 3.0)
     pygame.mixer.music.set_volume(0.2)
-    if map_name == "village_spawn_map" :
+    if map_name == "ravenshire" :
         dialog = [
             "Alberic: Oh, tu as donc réussi à fuir le monstre dans la forêt.. haha..",
             "Alberic: Ou bien tu as peut-être dû le tuer.. si c'est le cas j'espère qu'il n'a pas trop souffert..",
@@ -23,7 +23,7 @@ def Alberic_dialog(map_name):
             "Alberic: Bon courage à toi, aventurier..",
             "Alberic: Tu en auras besoin.."
         ]
-    elif map_name == "village_spawn_map2" :
+    elif map_name == "ravenshire2" :
         dialog = [
             "Alberic: Tu es encore là..",
             "Alberic: Je te conseille d'aller te diriger à l'ouest",

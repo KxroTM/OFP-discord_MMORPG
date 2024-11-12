@@ -9,6 +9,6 @@ parser.add_argument('-i', '--input', type=str, help="Nom de la carte à charger"
 args = parser.parse_args()
 
 if args.input:
-    village_spawn()
+    village_spawn(True)
 else:
     intro() 

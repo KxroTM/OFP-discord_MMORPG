@@ -14,6 +14,7 @@ spawn_player = player(
     inventory= inventory(),
     crit_rate=10,
     crit_dmg=1,
+    coord=[0,0],
 )
 
 spawn_mob = mob(

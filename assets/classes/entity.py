@@ -16,11 +16,11 @@ class entity :
 
 
 class player(entity) :
-    def __init__(self, name, hp, atk, defense, xp, level,inventory,  crit_rate, crit_dmg) :
+    def __init__(self, name, hp, atk, defense, xp, level,inventory,  crit_rate, crit_dmg, coord) :
         super().__init__(name, hp, atk, defense, level , crit_rate, crit_dmg)
         self.xp = xp
         self.inventory = inventory
-
+        self.coord = coord
 
     def attack(self, target) :
         crit = random.randint(1, 100)

@@ -3,7 +3,7 @@
 import time
 import os
 import keyboard
-from assets.object.game import spawn
+from assets.object.game import gamestart
 
 
 def intro(vitesse=0.13):
@@ -21,7 +21,7 @@ def intro(vitesse=0.13):
     choice = input("\n")
 
     if choice == "1":
-        spawn()
+        gamestart()
 
     elif choice == "2":
         print("Option 2 sélectionnée.")
