@@ -9,7 +9,7 @@
 ## Run the game
 
 ```bash
-    python3 main.py
+    python3.13 main.py
 ```
 
 ## Game controls
