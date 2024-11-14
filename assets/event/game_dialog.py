@@ -44,7 +44,7 @@ def Alberic_dialog(map_name):
     pygame.mixer.music.stop()
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def Alberic_player_intro():
+def Alberic_player_intro(coord=None):
     
     dialog = [
         "Alberic: Attends un instant..",
@@ -84,6 +84,7 @@ def Alberic_player_intro():
         inventory= inventory(),
         crit_rate=5,
         crit_dmg=2,
+        coord=coord
     )
 
     Player.inventory.add(Carte)

@@ -12,7 +12,7 @@ from assets.event.game_dialog import Alberic_dialog, Alberic_player_intro
 from assets.object.items import Carte
 from assets.play.controls import Controls
 from assets.play.utils import move_in_pause_menu
-from assets.object.maps import caelid, route_1 , ravenshire
+from assets.object.maps import caelid, route_1 , ravenshire, route_5, route_2, eldermbrume, route_4, route_6 , fernhollow, route_7, route_8
 
 global Player
 Player = spawn_player
@@ -29,8 +29,8 @@ def afficher_carte(map):
         print("".join(row))
 
 def deplacer_joueur(direction,map):
-    global spawn_player, monster_pos, monster_defait
-    new_pos = spawn_player.coord.copy()
+    global Player, monster_pos, monster_defait
+    new_pos = Player.coord.copy()
 
     if direction == Controls["up"]:  # Haut
         new_pos[0] -= 1
@@ -41,30 +41,30 @@ def deplacer_joueur(direction,map):
     elif direction == Controls["right"]:  # Droite
         new_pos[1] += 1
 
-    if (0 <= new_pos[0] < len(map) and
-            0 <= new_pos[1] < len(map[0]) and
-            map[new_pos[0]][new_pos[1]] not in map.collision):
-        map[spawn_player.coord[0]][spawn_player.coord[1]] = "  "
-        spawn_player.coord = new_pos
-        map[spawn_player.coord[0]][spawn_player.coord[1]] = " O"
+    if (0 <= new_pos[0] < len(map.map) and
+            0 <= new_pos[1] < len(map.map[0]) and
+            map.map[new_pos[0]][new_pos[1]] not in map.collision):
+        map.map[Player.coord[0]][Player.coord[1]] = "  "
+        Player.coord = new_pos
+        map.map[Player.coord[0]][Player.coord[1]] = " O"
 
-        if map == caelid.map:
-            if spawn_player.coord[0] == 7 and monster_pos == None and monster_defait == False:
+        if map.map == caelid.map:
+            if Player.coord[0] == 7 and monster_pos == None and monster_defait == False:
                 monster_pos = [3, 11]
-                map[monster_pos[0]][monster_pos[1]] = emoji.emojize("🧟 ")
+                map.map[monster_pos[0]][monster_pos[1]] = emoji.emojize("🧟 ")
 
 def deplacer_monstre():
     global monster_pos
     if monster_pos:
         caelid.map[monster_pos[0]][monster_pos[1]] = "  "  
 
-        if monster_pos[0] < spawn_player.coord[0]:  # Descendre
+        if monster_pos[0] < Player.coord[0]:  # Descendre
             monster_pos[0] += 1
-        elif monster_pos[0] > spawn_player.coord[0]:  # Monter
+        elif monster_pos[0] > Player.coord[0]:  # Monter
             monster_pos[0] -= 1
-        if monster_pos[1] < spawn_player.coord[1]:  # Aller à droite
+        if monster_pos[1] < Player.coord[1]:  # Aller à droite
             monster_pos[1] += 1
-        elif monster_pos[1] > spawn_player.coord[1]:  # Aller à gauche
+        elif monster_pos[1] > Player.coord[1]:  # Aller à gauche
             monster_pos[1] -= 1
 
         caelid.map[monster_pos[0]][monster_pos[1]] = emoji.emojize("🧟 ")
@@ -75,62 +75,64 @@ def deplacer_Alberic():
         ravenshire.map[Alberic_pos[0]][Alberic_pos[1]] = "  "  
 
         # gestion des diagonales
-        if Alberic_pos[0] < spawn_player.coord[0] and Alberic_pos[1] < spawn_player.coord[1]:  # si le joueur est en bas à droite de Alberic
+        if Alberic_pos[0] < Player.coord[0] and Alberic_pos[1] < Player.coord[1]:  # si le joueur est en bas à droite de Alberic
             Alberic_pos[0] += 1
             ravenshire.map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
-            return
-        elif Alberic_pos[0] < spawn_player.coord[0] and Alberic_pos[1] > spawn_player.coord[1]:  # si le joueur est en bas à gauche de Alberic
+            return Alberic_pos
+        elif Alberic_pos[0] < Player.coord[0] and Alberic_pos[1] > Player.coord[1]:  # si le joueur est en bas à gauche de Alberic
             Alberic_pos[0] += 1
             ravenshire.map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
-            return
-        elif Alberic_pos[0] > spawn_player.coord[0] and Alberic_pos[1] < spawn_player.coord[1]:  # si le joueur est en haut à droite de Alberic
+            return Alberic_pos
+        elif Alberic_pos[0] > Player.coord[0] and Alberic_pos[1] < Player.coord[1]:  # si le joueur est en haut à droite de Alberic
             Alberic_pos[0] -= 1
             ravenshire.map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
-            return
-        elif Alberic_pos[0] > spawn_player.coord[0] and Alberic_pos[1] > spawn_player.coord[1]:  # si le joueur est en haut à gauche de Alberic
+            return Alberic_pos
+        elif Alberic_pos[0] > Player.coord[0] and Alberic_pos[1] > Player.coord[1]:  # si le joueur est en haut à gauche de Alberic
             Alberic_pos[0] -= 1
             ravenshire.map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
-            return
+            return Alberic_pos
 
-        if Alberic_pos[0] < spawn_player.coord[0]:  # si le joueur est en dessous de Alberic
+        if Alberic_pos[0] < Player.coord[0]:  # si le joueur est en dessous de Alberic
             Alberic_pos[0] += 1
-        elif Alberic_pos[0] > spawn_player.coord[0]:  # si le joueur est au dessus de Alberic
+        elif Alberic_pos[0] > Player.coord[0]:  # si le joueur est au dessus de Alberic
             Alberic_pos[0] -= 1
-        if Alberic_pos[1] < spawn_player.coord[1]:  # si le joueur est à droite
+        if Alberic_pos[1] < Player.coord[1]:  # si le joueur est à droite
             Alberic_pos[1] += 1
-        elif Alberic_pos[1] > spawn_player.coord[1]:  # si le joueur est à gauche
+        elif Alberic_pos[1] > Player.coord[1]:  # si le joueur est à gauche
             Alberic_pos[1] -= 1
         
         ravenshire.map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
+
+        return Alberic_pos
 
 def rdm_fight(taux_spawn): # A CHANGER LES MOBS
     rdm = random.randint(1, taux_spawn) 
     if rdm == 1:
         mob = random.randint(1, 4)
         if mob == 1:
-            fight(spawn_player, spawn_mob)
-            if spawn_player.hp <= 0:
+            fight(Player, spawn_mob)
+            if Player.hp <= 0:
                 gameoverscreen()
                 quit()
         elif mob == 2:
-            fight(spawn_player, spawn_mob)
-            if spawn_player.hp <= 0:
+            fight(Player, spawn_mob)
+            if Player.hp <= 0:
                 gameoverscreen()
                 quit()
         elif mob == 3:
-            fight(spawn_player, spawn_mob)
-            if spawn_player.hp <= 0:
+            fight(Player, spawn_mob)
+            if Player.hp <= 0:
                 gameoverscreen()
                 quit()
         elif mob == 4:
-            fight(spawn_player, spawn_mob)
-            if spawn_player.hp <= 0:
+            fight(Player, spawn_mob)
+            if Player.hp <= 0:
                 gameoverscreen()
                 quit()
 
 def spawn() :
     global monster_pos, monster_defait, tp_pos
-    caelid.map[spawn_player.coord[0]][spawn_player.coord[1]] = " O"
+    caelid.map[Player.coord[0]][Player.coord[1]] = " O"
     monster_pos = None
     monster_defait = False
     tp_pos = [[0,9],[0,10],[0, 11],[0,12],[0,13]]
@@ -150,12 +152,12 @@ def spawn() :
         if key == Controls["inventory"]:
             Player.inventory.show()
             afficher_carte(caelid.map)
-        deplacer_joueur(key, caelid.map)
+        deplacer_joueur(key, caelid)
         deplacer_monstre()
-        if monster_pos == spawn_player.coord:
+        if monster_pos == Player.coord:
             pygame.mixer.music.stop()
-            fight(spawn_player, spawn_mob)
-            if spawn_player.hp <= 0:
+            fight(Player, spawn_mob)
+            if Player.hp <= 0:
                 gameoverscreen()
                 quit()
             else:
@@ -167,14 +169,14 @@ def spawn() :
                 pygame.mixer.music.play(-1, 3.0)
                 pygame.mixer.music.set_volume(0.2)
 
-        if spawn_player.coord in tp_pos:
-            caelid.map[spawn_player.coord[0]][spawn_player.coord[1]] = "  "
-            spawn_player.coord = [15, spawn_player.coord[1]]
+        if Player.coord in tp_pos:
+            caelid.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [15, Player.coord[1]]
             spawn_nextmap()           
 
 def spawn_nextmap() :
-    global spawn_player, tp_pos
-    route_1.map[spawn_player.coord[0]][spawn_player.coord[1]] = " O"
+    global Player, tp_pos
+    route_1.map[Player.coord[0]][Player.coord[1]] = " O"
     tp_pos = [[0,9],[0,10],[0, 11],[0,12],[0,13]]
     last_map_pos = [[16,9],[16,10],[16, 11],[16,12],[16,13]]
     collision_spawn_map = ["🌲"]
@@ -189,29 +191,29 @@ def spawn_nextmap() :
         if key == Controls["inventory"]:
             Player.inventory.show()
             afficher_carte(route_1.map)
-        deplacer_joueur(key, route_1.map)
+        deplacer_joueur(key, route_1)
 
-        if spawn_player.coord in tp_pos:
-            route_1.map[spawn_player.coord[0]][spawn_player.coord[1]] = "  "
-            spawn_player.coord = [15,spawn_player.coord[1]]
+        if Player.coord in tp_pos:
+            route_1.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [15,Player.coord[1]]
             village_spawn()
         
-        if spawn_player.coord in last_map_pos:
-            route_1.map[spawn_player.coord[0]][spawn_player.coord[1]] = "  "
-            spawn_player.coord = [1,spawn_player.coord[1]]
+        if Player.coord in last_map_pos:
+            route_1.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [1,Player.coord[1]]
             spawn()
 
 def village_spawn(spawn=False) :
-    global spawn_player, tp_pos, tp_pos2, Alberic_pos, Player
+    global Player, tp_pos, tp_pos2, Alberic_pos, Player
     if spawn == True:
-        spawn_player.coord = [15, 11]
-    Alberic_pos = [7, 10]
-    Player = spawn_player
+        Player.coord = [15, 11]
+    if Player.name == spawn_player.name:
+        Alberic_pos = [7, 10]
     tp_pos = [[4,0], [5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0],[12,0]]
     tp_pos2 = [[0,10], [0,11], [0,12]]
     last_map_pos = [[16, 9], [16, 11], [16, 12], [16, 13], [16, 10]]
     ravenshire.map[Alberic_pos[0]][Alberic_pos[1]] = "🧙"
-    ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] = " O"
+    ravenshire.map[Player.coord[0]][Player.coord[1]] = " O"
     tombe_pos = [5,17]
     ravenshire.map[tombe_pos[0]][tombe_pos[1]] = "📜"
     while True:
@@ -228,10 +230,10 @@ def village_spawn(spawn=False) :
                 Player.inventory.show()
                 afficher_carte(ravenshire.map)
 
-            deplacer_joueur(key, ravenshire.map)
+            deplacer_joueur(key, ravenshire)
 
-            if (ravenshire.map[Alberic_pos[0]-1][Alberic_pos[1]] == ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] or ravenshire.map[Alberic_pos[0]+1][Alberic_pos[1]] == ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] or ravenshire.map[Alberic_pos[0]][Alberic_pos[1]-1] == ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] or ravenshire.map[Alberic_pos[0]][Alberic_pos[1]+1] == ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]]) and key == Controls["interact"]:
-                if Player == spawn_player:
+            if (ravenshire.map[Alberic_pos[0]-1][Alberic_pos[1]] == ravenshire.map[Player.coord[0]][Player.coord[1]] or ravenshire.map[Alberic_pos[0]+1][Alberic_pos[1]] == ravenshire.map[Player.coord[0]][Player.coord[1]] or ravenshire.map[Alberic_pos[0]][Alberic_pos[1]-1] == ravenshire.map[Player.coord[0]][Player.coord[1]] or ravenshire.map[Alberic_pos[0]][Alberic_pos[1]+1] == ravenshire.map[Player.coord[0]][Player.coord[1]]) and key == Controls["interact"]:
+                if Player.name == spawn_player.name:
                     Alberic_dialog("ravenshire")
                     pygame.mixer.music.load("./src/audio/spawn.wav")
                     pygame.mixer.music.play(-1, 3.0)
@@ -241,13 +243,12 @@ def village_spawn(spawn=False) :
                         key = msvcrt.getch().decode('utf-8')
                         if key == Controls["exit"]:
                             move_in_pause_menu()
-                        deplacer_joueur(key, ravenshire.map)
-                    while (ravenshire.map[Alberic_pos[0]-1][Alberic_pos[1]] != ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] and ravenshire.map[Alberic_pos[0]+1][Alberic_pos[1]] != ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] and ravenshire.map[Alberic_pos[0]][Alberic_pos[1]-1] != ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] and ravenshire.map[Alberic_pos[0]][Alberic_pos[1]+1] != ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]]):
-                        deplacer_Alberic()
+                        deplacer_joueur(key, ravenshire)
+                    while (ravenshire.map[Alberic_pos[0]-1][Alberic_pos[1]] != ravenshire.map[Player.coord[0]][Player.coord[1]] and ravenshire.map[Alberic_pos[0]+1][Alberic_pos[1]] != ravenshire.map[Player.coord[0]][Player.coord[1]] and ravenshire.map[Alberic_pos[0]][Alberic_pos[1]-1] != ravenshire.map[Player.coord[0]][Player.coord[1]] and ravenshire.map[Alberic_pos[0]][Alberic_pos[1]+1] != ravenshire.map[Player.coord[0]][Player.coord[1]]):
+                        Alberic_pos = deplacer_Alberic()
                         afficher_carte(ravenshire.map)
                         time.sleep(1)
-                    Player = Alberic_player_intro()
-                    Player.coord = spawn_player.coord
+                    Player = Alberic_player_intro(Player.coord)
                     pygame.mixer.music.stop()
                     pygame.mixer.music.load("./src/audio/spawn.wav")
                     pygame.mixer.music.play(-1, 3.0)
@@ -258,48 +259,295 @@ def village_spawn(spawn=False) :
                     pygame.mixer.music.play(-1, 3.0)
                     pygame.mixer.music.set_volume(0.2)
             
-            if ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]+1]=="🌱" and key == Controls["interact"]:
-                if Player == spawn_player:
-                    print("Vous n'avez pas d'objet pour couper cette arbuste, revenez plus tard")
-                    time.sleep(1)
-                elif "" in Player.inventory.items :
-                    ravenshire.map[18,13] = "  "
-                    print("Vous avez coupé l'arbuste")
-                    time.sleep(1)
-                else:
-                    print("Vous n'avez pas d'objet pour couper cette arbuste")
+            if Player.coord[1] != 22 :
+                if ravenshire.map[Player.coord[0]][Player.coord[1]+1]=="🌱" and key == Controls["interact"]:
+                    if Player == Player:
+                        print("Vous n'avez pas d'objet pour couper cette arbuste, revenez plus tard")
+                        time.sleep(1)
+                    elif "" in Player.inventory.items :
+                        ravenshire.map[18,13] = "  "
+                        print("Vous avez coupé l'arbuste")
+                        time.sleep(1)
+                    else:
+                        print("Vous n'avez pas d'objet pour couper cette arbuste")
+                        time.sleep(1)
+            
+            if Player.coord[0] != 0 :
+                if ravenshire.map[Player.coord[0]-1][Player.coord[1]]=="💼" and key == Controls["interact"]:
+                    print("Vous avez trouvé une carte")
                     time.sleep(1)
 
-            if ravenshire.map[spawn_player.coord[0]-1][spawn_player.coord[1]]=="💼" and key == Controls["interact"]:
-                print("Vous avez trouvé une carte")
-                time.sleep(1)
-
-            if (ravenshire.map[tombe_pos[0]-1][tombe_pos[1]]==ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]]or ravenshire.map[tombe_pos[0]+1][tombe_pos[1]]==ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]]or ravenshire.map[tombe_pos[0]][tombe_pos[1]-1]==ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]]) and key == Controls["interact"]:
+            if (ravenshire.map[tombe_pos[0]-1][tombe_pos[1]]==ravenshire.map[Player.coord[0]][Player.coord[1]]or ravenshire.map[tombe_pos[0]+1][tombe_pos[1]]==ravenshire.map[Player.coord[0]][Player.coord[1]]or ravenshire.map[tombe_pos[0]][tombe_pos[1]-1]==ravenshire.map[Player.coord[0]][Player.coord[1]]) and key == Controls["interact"]:
                 print("Il y a un panneau devant vous, voulez vous le lire ? (y/n)")
                 if input() == "y":
                     print("") # LORE A RACONTER ICI AVEC CONDITION CONTINUER DE LIRE 
                     time.sleep(1)
 
 
-            if spawn_player.coord in tp_pos:
-                if Player == spawn_player:
+            if Player.coord in tp_pos:
+                if Player.name == spawn_player.name:
                     afficher_carte(ravenshire.map)
                     print("Il est encore trop tôt pour partir")   
                     time.sleep(1)
-                    ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] = "  "
-                    spawn_player.coord = [spawn_player.coord[0], spawn_player.coord[1]+1]
-                    ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] = " O"
-                    afficher_carte(ravenshire.map)       
-            if  spawn_player.coord in tp_pos2:
-                if Player == spawn_player:
+                    ravenshire.map[Player.coord[0]][Player.coord[1]] = "  "
+                    Player.coord = [Player.coord[0], Player.coord[1]+1]
+                    ravenshire.map[Player.coord[0]][Player.coord[1]] = " O"
+                    afficher_carte(ravenshire.map)
+                else :
+                    ravenshire.map[Player.coord[0]][Player.coord[1]] = "  "
+                    Player.coord = Player.coord
+                    Player.coord = [Player.coord[0], 21]
+                    route2()
+                   
+            if  Player.coord in tp_pos2:
+                if Player.name == spawn_player.name:
                     afficher_carte(ravenshire.map)
                     print("Il est encore trop tôt pour partir")           
                     time.sleep(1)
-                    ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] = "  "
-                    spawn_player.coord = [spawn_player.coord[0]+1,spawn_player.coord[1]]
-                    ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] = " O"
+                    ravenshire.map[Player.coord[0]][Player.coord[1]] = "  "
+                    Player.coord = [Player.coord[0]+1,Player.coord[1]]
+                    ravenshire.map[Player.coord[0]][Player.coord[1]] = " O"
                     afficher_carte(ravenshire.map)
-            if spawn_player.coord in last_map_pos:
-                ravenshire.map[spawn_player.coord[0]][spawn_player.coord[1]] = "  "
-                spawn_player.coord = [1, spawn_player.coord[1]]
+                else :
+                    ravenshire.map[Player.coord[0]][Player.coord[1]] = "  "
+                    Player.coord = Player.coord
+                    Player.coord = [18, Player.coord[1]]
+                    route5()
+                
+            if Player.coord in last_map_pos:
+                ravenshire.map[Player.coord[0]][Player.coord[1]] = "  "
+                Player.coord = [1,Player.coord[1]]
                 spawn_nextmap()
+
+def route5():
+    route_5.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[0,10], [0,11], [0,12]]
+    last_map_pos = [[19,10], [19,11], [19,12]]
+    while True:
+        afficher_carte(route_5.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu()
+        if key == Controls["map"]:
+            Player.inventory.use(Carte)
+            afficher_carte(route_5.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show()
+            afficher_carte(route_5.map)
+        deplacer_joueur(key, route_5)
+
+        if Player.coord in tp_pos:
+            route_5.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [20,Player.coord[1]]
+            route4()
+
+        
+        if Player.coord in last_map_pos:
+            route_5.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [1,Player.coord[1]]
+            village_spawn()
+
+def route2():
+    route_2.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[4,0], [5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0],[12,0]]
+    last_map_pos = [[4,22], [5,22],[6,22],[7,22],[8,22],[9,22],[10,22],[11,22],[12,22]]
+    while True:
+        afficher_carte(route_2.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu()
+        if key == Controls["map"]:
+            Player.inventory.use(Carte)
+            afficher_carte(route_2.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show()
+            afficher_carte(route_2.map)
+        deplacer_joueur(key, route_2)
+
+        if Player.coord in tp_pos:
+            route_2.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [Player.coord[0],22]
+            eldermbrum()
+        
+        if Player.coord in last_map_pos:
+            route_2.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [Player.coord[0],1]
+            village_spawn()
+
+def eldermbrum():
+    eldermbrume.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[0,9],[0,10],[0,11],[0,12],[0,13]]
+    last_map_pos = [[4,22], [5,22],[6,22],[7,22],[8,22],[9,22],[10,22],[11,22],[12,22]]
+    while True:
+        afficher_carte(eldermbrume.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu()
+        if key == Controls["map"]:
+            Player.inventory.use(Carte)
+            afficher_carte(eldermbrume.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show()
+            afficher_carte(eldermbrume.map)
+        deplacer_joueur(key, eldermbrume)
+
+        if Player.coord in tp_pos:
+            eldermbrume.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [14,Player.coord[1]]
+            route6()
+        
+        if Player.coord in last_map_pos:
+            eldermbrume.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [Player.coord[0],1]
+            route2()
+
+def route4():
+    route_4.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[0,10], [0,11], [0,12]]
+    last_map_pos = [[21,10], [21,11], [21,12]]
+    while True:
+        afficher_carte(route_4.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu()
+        if key == Controls["map"]:
+            Player.inventory.use(Carte)
+            afficher_carte(route_4.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show()
+            afficher_carte(route_4.map)
+        deplacer_joueur(key, route_4)
+
+        if Player.coord in tp_pos:
+            route_4.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [14,Player.coord[1]]
+            fernhollo()
+
+        if Player.coord in last_map_pos:
+            route_4.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [1,Player.coord[1]]
+            route5()
+
+def route6():
+    route_6.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[4,22], [5,22],[6,22],[7,22],[8,22],[9,22],[10,22],[11,22]]
+    last_map_pos = [[15,9],[15,10],[15,11],[15,12],[15,13]]
+    while True:
+        afficher_carte(route_6.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu()
+        if key == Controls["map"]:
+            Player.inventory.use(Carte)
+            afficher_carte(route_6.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show()
+            afficher_carte(route_6.map)
+        deplacer_joueur(key, route_6)
+
+        if Player.coord in tp_pos:
+            route_6.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [Player.coord[0],1]
+            fernhollo()
+        
+        if Player.coord in last_map_pos:
+            route_6.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [1,Player.coord[1]]
+            eldermbrum()
+
+def fernhollo():
+    fernhollow.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[0,10],[0,11],[0,12]]
+    tp_pos2 = [[4,23], [5,23],[6,23],[7,23],[8,23],[9,23],[10,23],[11,23]]
+    last_map_pos = [[4,0], [5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0]]
+    last_map_pos2 = [[15,10], [15,11], [15,12]]
+    while True:
+        afficher_carte(fernhollow.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu()
+        if key == Controls["map"]:
+            Player.inventory.use(Carte)
+            afficher_carte(fernhollow.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show()
+            afficher_carte(fernhollow.map)
+        deplacer_joueur(key, fernhollow)
+
+        if Player.coord in tp_pos:
+            # fernhollow.map[Player.coord[0]][Player.coord[1]] = "  "
+            # Player.coord = [15,Player.coord[1]]
+            # route6()
+            print("Vous avez trouvé un passage secret")
+            time.sleep(1)
+        
+        if Player.coord in tp_pos2:
+            fernhollow.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [Player.coord[0], 1]
+            route7()
+
+        if Player.coord in last_map_pos:
+            fernhollow.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [Player.coord[0],21]
+            route6()
+
+        if Player.coord in last_map_pos2:
+            fernhollow.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [1,Player.coord[1]]
+            route4()
+
+def route7():
+    route_7.map[Player.coord[0]][Player.coord[1]] = " O"
+    last_map_pos = [[4,0], [5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0]]
+    tp_pos = [[4,22], [5,22],[6,22],[7,22],[8,22],[9,22],[10,22],[11,22]]
+    while True:
+        afficher_carte(route_7.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu()
+        if key == Controls["map"]:
+            Player.inventory.use(Carte)
+            afficher_carte(route_7.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show()
+            afficher_carte(route_7.map)
+        deplacer_joueur(key, route_7)
+
+        if Player.coord in tp_pos:
+            route_7.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [Player.coord[0],1]
+            route8()
+        
+        if Player.coord in last_map_pos:
+            route_7.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [Player.coord[0],22]
+            fernhollo()
+
+def route8():
+    route_8.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[16,12], [16,13], [16,14], [16,15], [16,16]]
+    last_map_pos = [[4,0], [5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0]]
+    while True:
+        afficher_carte(route_8.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu()
+        if key == Controls["map"]:
+            Player.inventory.use(Carte)
+            afficher_carte(route_8.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show()
+            afficher_carte(route_8.map)
+        deplacer_joueur(key, route_8)
+
+        if Player.coord in tp_pos:
+            # route_8.map[Player.coord[0]][Player.coord[1]] = "  "
+            # Player.coord = [Player.coord[0],22]
+            # route8()
+            print("Vous avez trouvé un passage secret")
+            time.sleep(1)
+        
+        if Player.coord in last_map_pos:
+            route_8.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [Player.coord[0],21]
+            route7()
