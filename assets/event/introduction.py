@@ -4,6 +4,7 @@ import time
 import os
 import keyboard
 from assets.object.game import gamestart
+from assets.event.save import load
 
 
 def intro(vitesse=0.13):
@@ -24,8 +25,8 @@ def intro(vitesse=0.13):
         gamestart()
 
     elif choice == "2":
-        print("Option 2 sélectionnée.")
-        # ici our l'option 2
+        player,carte = load("")
+        gamestart(player,carte)
 
     elif choice == "3":
         print(" 𝕬𝖚 𝖗𝖊𝖛𝖔𝖎𝖗 !")

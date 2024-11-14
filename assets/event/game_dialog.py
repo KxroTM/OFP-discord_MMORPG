@@ -29,6 +29,28 @@ def Alberic_dialog(map_name):
             "Alberic: Je te conseille d'aller te diriger à l'ouest",
             "Alberic: N'oublie pas ce que je t'ai dit..",
             "Alberic: Hahahahaha..",
+            "Alberic: Oh et si tu as besoin de te soigner, reviens me voir.."
+        ]
+    elif map_name == "ravenshire3" :
+        dialog = [
+            "Alberic: Tu es venu pour te faire soigner ?",
+        ]
+    elif map_name == "ravenshire4" :
+        dialog = [
+            "Alberic: Te voilà maintenant en pleine forme..",
+            "Alberic: Ton voyage n'a pas l'air très paisible..",
+            "Alberic: ...",
+        ]
+    elif map_name == "route_9" :
+        dialog = [
+            "Alberic: Te revoilà..",
+            "Alberic: Je suis aller voir comment tu t'es débrouillé dans la forêt..",
+            "Alberic: Tu l'as vraiment tué..",
+            "Alberic: Tu n'as donc pas changé..",
+            "Alberic: Tous ces efforts pour rien..",
+            "Alberic: Fais attention, derrière moi se trouve un des 4 Chevaliers de l'Apocalypse..",
+            "Alberic: J'aurais préféré que tu changes sans avoir à les retrouver..",
+            "Alberic: Qui sait, peut-être que après les avoir tous tués tu t'en souviendras..",
         ]
 
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -70,7 +92,7 @@ def Alberic_player_intro(coord=None):
             sys.stdout.flush()
             time.sleep(0.03)
         if i != (len(dialog)-1):
-            input("\nPress Enter to continue...")
+            input("\nAppuyez sur Entrer pour continuer...")
     
     username = input("\n> ")
 
@@ -82,9 +104,10 @@ def Alberic_player_intro(coord=None):
         xp=0,
         level=1,
         inventory= inventory(),
-        crit_rate=5,
+        crit_rate=15,
         crit_dmg=2,
-        coord=coord
+        coord=coord,
+        max_hp=15
     )
 
     Player.inventory.add(Carte)
@@ -100,7 +123,7 @@ def Alberic_player_intro(coord=None):
             sys.stdout.write(char)
             sys.stdout.flush()
             time.sleep(0.03)
-        input("\nPress Enter to continue...")
+        input("\nAppuyez sur Entrer pour continuer...")
 
     os.system('cls' if os.name == 'nt' else 'clear')
     return Player

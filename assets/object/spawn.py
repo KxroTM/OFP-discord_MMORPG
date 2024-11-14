@@ -2,7 +2,7 @@
 
 from assets.classes.entity import player, mob
 from assets.classes.inventory import inventory
-from assets.object.ascii import spawn_monster,farmer_mob,goblin_monster,knight,squeleton
+from assets.object.ascii import spawn_monster
 
 spawn_player = player(
     name = "Player",
@@ -15,6 +15,7 @@ spawn_player = player(
     crit_rate=10,
     crit_dmg=1,
     coord=[0,0],
+    max_hp=15,
 )
 
 spawn_mob = mob(

@@ -1,9 +1,10 @@
 # fight.py
 
 import pygame
-
+from assets.classes.inventory import potion_hp, potion_force, potion_defense
 import os
 import time
+import random
 
 def fight(player, mob) :
     pygame.mixer.music.load("./src/audio/spawnfight.wav")
@@ -23,35 +24,58 @@ def fight(player, mob) :
 
         choice = input()
 
+        while choice != "1" and choice != "2" and choice != "3":
+            print("Choix invalide.")
+            choice = input()
+
 
         if choice == "1":
             player.attack(mob)
             time.sleep(1)
 
         elif choice == "2":
-            player.use_inventory()
+            player.use_inventory(player)
             time.sleep(1)
             
         elif choice == "3":
             if player.flee(mob) == True:
-                print(f"{player.name} ran away.")
+                print(f"{player.name} a fuit.")
                 time.sleep(1)
                 break
             else:
-                print(f"{player.name} failed to run away.")
+                print(f"{player.name} n'a pas pu fuir.")
                 time.sleep(1)
-        else:
-            print("Invalid choice.")
-            continue
+
 
         if mob.hp <= 0:
-            print(f"{mob.name} is dead.")
+            print(f"{mob.name} est \033[1mmort\033[0m.")
             time.sleep(1)
-
+            drop_item(player)
+            player.xp += mob.level
+            player.level_up()
             pygame.mixer.music.stop()
             break
 
-        mob.attack(player)
-        time.sleep(1)
+        if choice != "2":
+            mob.attack(player)
+            time.sleep(1)
 
     pygame.mixer.music.stop()
+
+
+def drop_item(player):
+    drop_rate = random.randint(1, 100)
+    if drop_rate <= 30:
+        rdm_item = random.randint(1, 100)
+        if rdm_item <= 30:
+            print(f"{player.name} a obtenu une potion de soin.")
+            time.sleep(1)
+            return player.inventory.add(potion_hp(name="Potion de soin 1"))
+        elif rdm_item > 30 and rdm_item <= 60:
+            print(f"{player.name} a obtenu une potion de force.")
+            time.sleep(1)
+            return player.inventory.add(potion_force(name="Potion de force 1"))
+        elif rdm_item > 60 and rdm_item <= 90:
+            print(f"{player.name} a obtenu une potion de défense.")
+            time.sleep(1)
+            return player.inventory.add(potion_defense(name="Potion de défense 1"))

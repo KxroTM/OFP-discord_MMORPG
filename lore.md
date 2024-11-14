@@ -18,7 +18,7 @@ son pere le violait, le battait et le torturait car il était nul a tout donc co
 Son pere etant devenu triste et fou de douleur a fini par se suicider et sa mere fu renier de la royauté et fini par devenir prostituée pour survivre
 
 ==> le roi fut traumatisé et devint amnésique et ne se souvient plus de rien
-==> Alberic a pannisé et a emmener le roi dans un endroit reculé au dela des forets
+==> Alberic a panniqué et a emmener le roi dans un endroit reculé au dela des forets
 
 
 tout a long du jeu ==> sorte de souvenir qui revient et qui fera en sorte que le joueur ai de la peine pour le roi mais qu'en meme temps au fur et a mesure qu'il avance dans le jeu il se rend compte que le roi est un monstre et qu'il a fait des choses horribles

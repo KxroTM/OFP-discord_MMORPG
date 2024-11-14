@@ -5,8 +5,8 @@ from assets.classes.entity import mob
 def createFarmerMob(Player):
     farmer_mob = mob(
         name="Fermier",
-        hp=Player.hp-5,
-        atk=Player.hp/6,
+        hp=Player.max_hp-5,
+        atk=Player.atk/2,
         defense=0,
         level=Player.level-1,
         focus=20,
@@ -20,9 +20,9 @@ def createFarmerMob(Player):
 def createGoblinMob(Player):
     goblin_monster = mob(
         name="Goblin",
-        hp=Player.hp,
-        atk=Player.hp/6,
-        defense=2,
+        hp=Player.max_hp,
+        atk=Player.atk-(Player.atk/2),
+        defense=Player.atk/4,
         level=Player.level+2,
         focus=50,
         image=goblin_monster_image,
@@ -34,9 +34,9 @@ def createGoblinMob(Player):
 def createKnightMob(Player):
     knight_mob = mob(
         name="Chevalier",
-        hp=Player.hp+5,
+        hp=Player.max_hp+5,
         atk=Player.hp/4,
-        defense=5,
+        defense=Player.atk/2,
         level=Player.level+5,
         focus=80,
         image=knight_image,
@@ -49,8 +49,8 @@ def createKnightMob(Player):
 def createSqueletonMob(Player):
     squeleton_mob = mob(
         name="Squelette",
-        hp=Player.hp,
-        atk=Player.hp/6,
+        hp=Player.max_hp/2,
+        atk=Player.atk/2,
         defense=0,
         level=Player.level+3,
         focus=100,

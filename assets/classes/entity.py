@@ -1,7 +1,7 @@
 # entity.py
 
 import random
-
+import time
 
 class entity :
     def __init__(self, name, hp, atk, defense, level,crit_rate,crit_dmg) :
@@ -16,20 +16,21 @@ class entity :
 
 
 class player(entity) :
-    def __init__(self, name, hp, atk, defense, xp, level,inventory,  crit_rate, crit_dmg, coord) :
+    def __init__(self, name, hp, atk, defense, xp, level,inventory,  crit_rate, crit_dmg, coord, max_hp) :
         super().__init__(name, hp, atk, defense, level , crit_rate, crit_dmg)
         self.xp = xp
         self.inventory = inventory
         self.coord = coord
+        self.max_hp = max_hp
 
     def attack(self, target) :
         crit = random.randint(1, 100)
         if crit <= self.crit_rate : 
             damage = self.atk * self.crit_dmg - target.defense
-            print(f'You crit {target.name} for {damage} damage!')
+            print(f'Vous avez crit {target.name} pour {damage} damage!')
         else :
             damage = self.atk - target.defense
-            print(f'You hit {target.name} for {damage} damage!')
+            print(f'Vous avez attaqué {target.name} pour {damage} damage!')
         target.hp -= damage
 
     def flee(self, target) :
@@ -39,12 +40,23 @@ class player(entity) :
         else :
             return False
 
-    def use_inventory(self) :
+    def use_inventory(self,player) :
         if len(self.inventory.items) == 0 :
-            print("Inventory is empty.")
+            print("Il n'y a rien dans votre inventaire")
             return
         else :
-            print("Inventory:")
+            self.inventory.show_in_fight(player)
+
+    def level_up(self) :
+        if self.xp >= self.level * 10 :
+            self.level += 1
+            self.xp = 0
+            self.max_hp += 10
+            self.hp += 10
+            self.atk += 5
+            self.defense += 5
+            print(f"Vous avez atteint le niveau {self.level} !")
+            time.sleep(1)
 
 class mob(entity) :
     def __init__(self, name, hp, atk, defense, level,crit_rate,crit_dmg, focus, image) :
@@ -56,9 +68,9 @@ class mob(entity) :
         crit = random.randint(1, 100)
         if crit <= self.crit_rate : 
             damage = self.atk * self.crit_dmg - target.defense
-            print(f'{self.name} crits {target.name} for {damage} damage!')
+            print(f'{self.name} vous a crit pour {damage} damage!')
         else :
             damage = self.atk - target.defense
-            print(f'{self.name} hits {target.name} for {damage} damage!')
+            print(f'{self.name} vous a attaqué pour {damage} damage!')
         target.hp -= damage
 

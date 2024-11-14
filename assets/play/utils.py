@@ -1,8 +1,11 @@
 import os
 import msvcrt
 from assets.play.controls import Controls
+from assets.event.save import save
+from assets.object.spawn import spawn_player
+import time
 
-def move_in_pause_menu():
+def move_in_pause_menu(player,carte):
     os.system('cls' if os.name == 'nt' else 'clear')
     cursor = [0,1]
     map = [["Reprendre", " "], ["Sauvegarder"," "], ["Quitter", " "]]
@@ -26,7 +29,15 @@ def move_in_pause_menu():
             if cursor[0] == 0 :
                 break
             elif cursor[0] == 1 :
-                print("Sauvegarde en cours")
+                if player.name == spawn_player.name :
+                    print("Vous ne pouvez pas sauvegarder pour l'instant.")
+                    time.sleep(2)
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                else :
+                    save(player,carte)
+                    print("Sauvegarde réussie")
+                    time.sleep(2)
+                    os.system('cls' if os.name == 'nt' else 'clear')
             elif cursor[0] == 2 :
                 print("Quitter")
                 exit()
