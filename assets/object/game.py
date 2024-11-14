@@ -13,6 +13,8 @@ from assets.object.items import Carte
 from assets.play.controls import Controls
 from assets.play.utils import move_in_pause_menu
 from assets.object.maps import caelid, route_1 , ravenshire, route_5, route_2, eldermbrume, route_4, route_6 , fernhollow, route_7, route_8
+from assets.object.mob import createFarmerMob, createGoblinMob, createKnightMob, createSqueletonMob
+
 
 global Player
 Player = spawn_player
@@ -110,22 +112,22 @@ def rdm_fight(taux_spawn): # A CHANGER LES MOBS
     if rdm == 1:
         mob = random.randint(1, 4)
         if mob == 1:
-            fight(Player, spawn_mob)
+            fight(Player, createFarmerMob(Player))
             if Player.hp <= 0:
                 gameoverscreen()
                 quit()
         elif mob == 2:
-            fight(Player, spawn_mob)
+            fight(Player, createGoblinMob(Player))
             if Player.hp <= 0:
                 gameoverscreen()
                 quit()
         elif mob == 3:
-            fight(Player, spawn_mob)
+            fight(Player, createKnightMob(Player))
             if Player.hp <= 0:
                 gameoverscreen()
                 quit()
         elif mob == 4:
-            fight(Player, spawn_mob)
+            fight(Player, createSqueletonMob(Player))
             if Player.hp <= 0:
                 gameoverscreen()
                 quit()
