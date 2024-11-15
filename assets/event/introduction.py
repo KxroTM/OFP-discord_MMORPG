@@ -25,8 +25,13 @@ def intro(vitesse=0.13):
         gamestart()
 
     elif choice == "2":
-        player,carte = load("")
-        gamestart(player,carte)
+        if os.path.exists("./save.sql"):
+            player,carte = load("")
+            gamestart(player,carte)
+        else:
+            print("Il n'y a pas de sauvegarde")
+            time.sleep(1)
+            intro()
 
     elif choice == "3":
         print(" 𝕬𝖚 𝖗𝖊𝖛𝖔𝖎𝖗 !")

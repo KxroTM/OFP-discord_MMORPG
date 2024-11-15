@@ -2,6 +2,8 @@
 
 ## Install dependencies
 
+- THE GAME IS ONLY COMPATIBLE WITH PYTHON 3.13
+
 ```bash
     pip install keyboard, emoji, pygame
 ```
