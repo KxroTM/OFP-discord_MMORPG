@@ -2,6 +2,8 @@
 import time
 import os
 import msvcrt
+from assets.play.map import Game_map
+
 
 def move_in_inventory(items,player) :
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -153,10 +155,8 @@ class carte(item) :
     
     def use(self) :
         os.system('cls' if os.name == 'nt' else 'clear')
-        print("Vous regardez la carte..")
-        print("Vous êtes actuellement à l'endroit indiqué par le point rouge")
-        print("Vous pouvez voir les différentes zones que vous avez déjà visité")
-        print("Vous pouvez également voir les zones que vous n'avez pas encore visité")
+        for ligne in Game_map :
+            print(ligne)
         input("Entrer pour continuer..")
         os.system('cls' if os.name == 'nt' else 'clear')
 
