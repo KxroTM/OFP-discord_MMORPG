@@ -47,8 +47,14 @@ def move_in_inventory(items,player) :
             elif key == "e" :
                 if items[cursor[0]].type != "important" :
                     items[cursor[0]].use(player)
+                    if items[cursor[0]].type == "usable" :
+                        items.remove(items[cursor[0]])
+                        if cursor[0] == len(items) :
+                            cursor[0] -= 1
+                        print_inventaire(items)
                 else :
                     items[cursor[0]].use()
+
 
     afficher_inventaire(items,"")
     while True:
@@ -66,9 +72,10 @@ def move_in_inventory_fight(items,player) :
         time.sleep(1)
         return
     else :
-        def afficher_inventaire(items, key) :
+        cursor = [0,1]
+
+        def print_inventaire(items):
             os.system('cls' if os.name == 'nt' else 'clear')
-            cursor = [0,1]
 
             for i in range(len(items)) :
                 map = [[items[i].name, " "] for i in range(len(items))]
@@ -79,21 +86,23 @@ def move_in_inventory_fight(items,player) :
             for i in range(len(map)) :
                 print(map[i][0] + "   " + map[i][1])
 
-            print("\n\n\nAppuyez sur 'i' pour quitter l'inventaire")
 
+        def afficher_inventaire(items, key) :
+            print_inventaire(items)
             if key == "z" and cursor[0] > 0 :
                 cursor[0] -= 1
+                print_inventaire(items)
             elif key == "s" and cursor[0] < len(items) - 1 :
                 cursor[0] += 1
+                print_inventaire(items)
             elif key == "e" :
                 items[cursor[0]].use(player)
-                return
+                return True
 
     afficher_inventaire(items,"")
     while True:
         key = msvcrt.getch().decode('utf-8')
-        afficher_inventaire(items, key)
-        if key == "i":
+        if afficher_inventaire(items, key) :
             return
 
 class inventory :
@@ -108,8 +117,9 @@ class inventory :
         self.items.remove(item)
 
     def use(self, item) :
-        if item in self.items :
-            item.use()
+        item_ = self.get_item(item)
+        if item_ != None :
+            item_.use()
         else :
             print("Vous n'avez pas cet objet dans votre inventaire")
             time.sleep(1)

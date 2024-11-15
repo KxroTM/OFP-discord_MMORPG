@@ -6,14 +6,13 @@ import pygame
 import random
 import time
 from assets.event.fight import fight
-from assets.event.game_state import gameoverscreen
+from assets.event.game_state import gameoverscreen,winscreen
 from assets.object.spawn import spawn_mob, spawn_player
 from assets.event.game_dialog import Alberic_dialog, Alberic_player_intro
-from assets.object.items import Carte
 from assets.play.controls import Controls
 from assets.play.utils import move_in_pause_menu
-from assets.object.maps import caelid, route_1 , ravenshire, route_5, route_2, eldermbrume, route_4, route_6 , fernhollow, route_7, route_8, route_9
-from assets.object.mob import createFarmerMob, createGoblinMob, createKnightMob, createSqueletonMob
+from assets.object.maps import caelid, route_1 , ravenshire, route_5, route_2, eldermbrume, route_4, route_6 , fernhollow, route_7, route_8, route_9, boss_stonehollow,boss_brackenstone,boss_duskreap,kingdom_of_thornspire
+from assets.object.mob import createFarmerMob, createGoblinMob, createKnightMob, createSqueletonMob, createBossBrackenstone, createBossDuskreap, createBossKingshollow, createBossStonehollow
 from assets.classes.inventory import epee
 
 
@@ -65,6 +64,16 @@ def gamestart(player=None,map=None):
         elif map == "route_9":
             route_9.map[Player.coord[0]][Player.coord[1]] = " O"
             route9()
+        elif map == "boss_stonehollow":
+            boss_stonehollow.map[Player.coord[0]][Player.coord[1]] = " O"
+            stonehollo()
+        elif map == "boss_brackenstone":
+            boss_brackenstone.map[Player.coord[0]][Player.coord[1]] = " O"
+            brackenstone()
+        elif map == "boss_duskreap":
+            boss_duskreap.map[Player.coord[0]][Player.coord[1]] = " O"
+            duskreap()
+        
         
 
 def afficher_carte(map):
@@ -191,7 +200,7 @@ def spawn() :
         if key == Controls["exit"]:
             move_in_pause_menu(Player, "caelid")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(caelid.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -230,7 +239,7 @@ def spawn_nextmap() :
         if key == Controls["exit"]:
             move_in_pause_menu(Player, "route_1")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(route_1.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -267,7 +276,7 @@ def village_spawn(spawn=False) :
             if key == Controls["exit"]:
                 move_in_pause_menu(Player, "ravenshire")
             if key == Controls["map"]:
-                Player.inventory.use(Carte)
+                Player.inventory.use("Carte")
                 afficher_carte(ravenshire.map)
             if key == Controls["inventory"]:
                 Player.inventory.show(Player)
@@ -395,7 +404,7 @@ def route5():
         if key == Controls["exit"]:
             move_in_pause_menu(Player, "route_5")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(route_5.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -423,7 +432,7 @@ def route2():
         if key == Controls["exit"]:
             move_in_pause_menu(Player, "route_2")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(route_2.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -450,7 +459,7 @@ def eldermbrum():
         if key == Controls["exit"]:
             move_in_pause_menu(Player, "eldermbrume")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(eldermbrume.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -477,7 +486,7 @@ def route4():
         if key == Controls["exit"]:
             move_in_pause_menu(Player, "route_4")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(route_4.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -504,7 +513,7 @@ def route6():
         if key == Controls["exit"]:
             move_in_pause_menu(Player, "route_6")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(route_6.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -534,7 +543,7 @@ def fernhollo():
         if key == Controls["exit"]:
             move_in_pause_menu(Player, "fernhollow")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(fernhollow.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -574,7 +583,7 @@ def route7():
         if key == Controls["exit"]:
             move_in_pause_menu(Player, "route_7")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(route_7.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -602,7 +611,7 @@ def route8():
         if key == Controls["exit"]:
             move_in_pause_menu(Player,"route_8")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(route_8.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -631,7 +640,7 @@ def route9():
         if key == Controls["exit"]:
             move_in_pause_menu(Player,"route_9")
         if key == Controls["map"]:
-            Player.inventory.use(Carte)
+            Player.inventory.use("Carte")
             afficher_carte(route_9.map)
         if key == Controls["inventory"]:
             Player.inventory.show(Player)
@@ -647,8 +656,10 @@ def route9():
 
         if Player.coord in tp_pos:
             route_9.map[Player.coord[0]][Player.coord[1]] = "  "
-            Player.coord = [Player.coord[0],21]
+            Player.coord = [1,Player.coord[1]]
             Alberic_dialog("route_9")
+            stonehollo()
+
         
         if Player.coord == [18,16] and key == Controls["interact"]:
             if Player.hp < Player.max_hp:
@@ -657,3 +668,182 @@ def route9():
                 if choice == "oui":
                     Player.hp = Player.max_hp
                     Alberic_dialog("ravenshire4")
+
+
+def stonehollo() :
+    boss_stonehollow.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[15,12], [15,13], [15,14], [15,15], [15,16]]
+    last_map_pos = [[0,12], [0,13], [0,14], [0,15], [0,16]]
+    boss_pos = [11,13]
+    while True:
+        afficher_carte(boss_stonehollow.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu(Player,"boss_stonehollow")
+        if key == Controls["map"]:
+            Player.inventory.use("Carte")
+            afficher_carte(boss_stonehollow.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show(Player)
+            afficher_carte(boss_stonehollow.map)
+        deplacer_joueur(key, boss_stonehollow)
+        rdm_fight(50)
+
+        if Player.coord in tp_pos:
+            if  boss_stonehollow.map[11][13] == "🕷️ ":
+                print("Vous ne pouvez pas partir tant que le boss n'est pas vaincu")
+                time.sleep(1)
+                boss_stonehollow.map[Player.coord[0]][Player.coord[1]] = "  "
+                Player.coord = [Player.coord[0]-1,Player.coord[1]]
+                boss_stonehollow.map[Player.coord[0]][Player.coord[1]] = " O"
+            else :
+                boss_stonehollow.map[Player.coord[0]][Player.coord[1]] = "  "
+                Player.coord = [1,Player.coord[1]]
+                brackenstone()
+            
+        if Player.coord in last_map_pos:
+            boss_stonehollow.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [18,Player.coord[1]]
+            route9()
+
+        if Player.coord[0] != 15 and Player.coord[0] != 0 and Player.coord[1] != 0 and Player.coord[1] != 22 and key == Controls["interact"]:
+            if (boss_stonehollow.map[boss_pos[0]-1][boss_pos[1]] == boss_stonehollow.map[Player.coord[0]][Player.coord[1]] or boss_stonehollow.map[boss_pos[0]+1][boss_pos[1]] == boss_stonehollow.map[Player.coord[0]][Player.coord[1]] or boss_stonehollow.map[boss_pos[0]][boss_pos[1]-1] == boss_stonehollow.map[Player.coord[0]][Player.coord[1]] or boss_stonehollow.map[boss_pos[0]][boss_pos[1]+1] == boss_stonehollow.map[Player.coord[0]][Player.coord[1]]) and key == Controls["interact"]:
+                fight(Player, createBossStonehollow(Player))
+                if Player.hp <= 0:
+                    gameoverscreen()
+                    quit()
+                boss_stonehollow.map[boss_pos[0]][boss_pos[1]] = "  "
+
+
+
+
+def brackenstone() :
+    boss_brackenstone.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[15,11], [15,12], [15,13], [15,14], [15,15]]
+    last_map_pos = [[0,12], [0,13], [0,14], [0,15], [0,16]]
+    boss_pos = [8,13]
+    while True:
+        afficher_carte(boss_brackenstone.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu(Player,"boss_brackenstone")
+        if key == Controls["map"]:
+            Player.inventory.use("Carte")
+            afficher_carte(boss_brackenstone.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show(Player)
+            afficher_carte(boss_brackenstone.map)
+        deplacer_joueur(key, boss_brackenstone)
+        rdm_fight(50)
+
+        if Player.coord in tp_pos:
+            if  boss_brackenstone.map[8][13] == "🗿":
+                print("Vous ne pouvez pas partir tant que le boss n'est pas vaincu")
+                time.sleep(1)
+                boss_brackenstone.map[Player.coord[0]][Player.coord[1]] = "  "
+                Player.coord = [Player.coord[0]-1,Player.coord[1]]
+                boss_brackenstone.map[Player.coord[0]][Player.coord[1]] = " O"
+            else :
+                boss_brackenstone.map[Player.coord[0]][Player.coord[1]] = "  "
+                Player.coord = [1,Player.coord[1]]
+                duskreap()
+            
+        if Player.coord in last_map_pos:
+            boss_brackenstone.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [14,Player.coord[1]]
+            stonehollo()
+
+        if Player.coord[0] != 15 and Player.coord[0] != 0 and Player.coord[1] != 0 and Player.coord[1] != 22 and key == Controls["interact"]:
+            if (boss_brackenstone.map[boss_pos[0]-1][boss_pos[1]] == boss_brackenstone.map[Player.coord[0]][Player.coord[1]] or boss_brackenstone.map[boss_pos[0]+1][boss_pos[1]] == boss_brackenstone.map[Player.coord[0]][Player.coord[1]] or boss_brackenstone.map[boss_pos[0]][boss_pos[1]-1] == boss_brackenstone.map[Player.coord[0]][Player.coord[1]] or boss_brackenstone.map[boss_pos[0]][boss_pos[1]+1] == boss_brackenstone.map[Player.coord[0]][Player.coord[1]]) and key == Controls["interact"]:
+                fight(Player, createBossBrackenstone(Player))
+                if Player.hp <= 0:
+                    gameoverscreen()
+                    quit()
+                boss_brackenstone.map[boss_pos[0]][boss_pos[1]] = "  "
+
+
+def duskreap():
+    boss_duskreap.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[15,12], [15,13], [15,14], [15,15], [15,11]]
+    last_map_pos = [[0,12], [0,13], [0,14], [0,15], [0,16]]
+    boss_pos = [7,12]
+    while True:
+        afficher_carte(boss_duskreap.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu(Player,"boss_duskreap")
+        if key == Controls["map"]:
+            Player.inventory.use("Carte")
+            afficher_carte(boss_duskreap.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show(Player)
+            afficher_carte(boss_duskreap.map)
+        deplacer_joueur(key, boss_duskreap)
+        rdm_fight(50)
+
+        if Player.coord in tp_pos:
+            if  boss_duskreap.map[7][12] == "👻":
+                print("Vous ne pouvez pas partir tant que le boss n'est pas vaincu")
+                time.sleep(1)
+                boss_duskreap.map[Player.coord[0]][Player.coord[1]] = "  "
+                Player.coord = [Player.coord[0]-1,Player.coord[1]]
+                boss_duskreap.map[Player.coord[0]][Player.coord[1]] = " O"
+            else :
+                boss_duskreap.map[Player.coord[0]][Player.coord[1]] = "  "
+                Player.coord = [1,Player.coord[1]]
+                kingdomthornspire()
+            
+        if Player.coord in last_map_pos:
+            boss_duskreap.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [14,Player.coord[1]]
+            brackenstone()
+
+        if Player.coord[0] != 15 and Player.coord[0] != 0 and Player.coord[1] != 0 and Player.coord[1] != 22 and key == Controls["interact"]:
+            if (boss_duskreap.map[boss_pos[0]-1][boss_pos[1]] == boss_duskreap.map[Player.coord[0]][Player.coord[1]] or boss_duskreap.map[boss_pos[0]+1][boss_pos[1]] == boss_duskreap.map[Player.coord[0]][Player.coord[1]] or boss_duskreap.map[boss_pos[0]][boss_pos[1]-1] == boss_duskreap.map[Player.coord[0]][Player.coord[1]] or boss_duskreap.map[boss_pos[0]][boss_pos[1]+1] == boss_duskreap.map[Player.coord[0]][Player.coord[1]]) and key == Controls["interact"]:
+                fight(Player, createBossDuskreap(Player))
+                if Player.hp <= 0:
+                    gameoverscreen()
+                    quit()
+                boss_duskreap.map[boss_pos[0]][boss_pos[1]] = "  "
+
+
+def kingdomthornspire():
+    kingdom_of_thornspire.map[Player.coord[0]][Player.coord[1]] = " O"
+    tp_pos = [[15,12], [15,13], [15,14], [15,15], [15,11]]
+    last_map_pos = [[0,12], [0,13], [0,14], [0,15], [0,16]]
+    boss_pos = [7,12]
+    while True:
+        afficher_carte(kingdom_of_thornspire.map)
+        key = msvcrt.getch().decode('utf-8')
+        if key == Controls["exit"]:
+            move_in_pause_menu(Player,"kingdom_of_thornspire")
+        if key == Controls["map"]:
+            Player.inventory.use("Carte")
+            afficher_carte(kingdom_of_thornspire.map)
+        if key == Controls["inventory"]:
+            Player.inventory.show(Player)
+            afficher_carte(kingdom_of_thornspire.map)
+        deplacer_joueur(key, kingdom_of_thornspire)
+        rdm_fight(50)
+
+        if Player.coord in tp_pos:
+            if  kingdom_of_thornspire.map[7][12] == "👹":
+                print("Vous ne pouvez pas partir tant que le boss n'est pas vaincu")
+                time.sleep(1)
+                kingdom_of_thornspire.map[Player.coord[0]][Player.coord[1]] = "  "
+                Player.coord = [Player.coord[0]-1,Player.coord[1]]
+                kingdom_of_thornspire.map[Player.coord[0]][Player.coord[1]] = " O"
+                winscreen()
+            
+        if Player.coord in last_map_pos:
+            kingdom_of_thornspire.map[Player.coord[0]][Player.coord[1]] = "  "
+            Player.coord = [14,Player.coord[1]]
+            duskreap()
+
+        if Player.coord[0] != 15 and Player.coord[0] != 0 and Player.coord[1] != 0 and Player.coord[1] != 22 and key == Controls["interact"]:
+            if (kingdom_of_thornspire.map[boss_pos[0]-1][boss_pos[1]] == kingdom_of_thornspire.map[Player.coord[0]][Player.coord[1]] or kingdom_of_thornspire.map[boss_pos[0]+1][boss_pos[1]] == kingdom_of_thornspire.map[Player.coord[0]][Player.coord[1]] or kingdom_of_thornspire.map[boss_pos[0]][boss_pos[1]-1] == kingdom_of_thornspire.map[Player.coord[0]][Player.coord[1]] or kingdom_of_thornspire.map[boss_pos[0]][boss_pos[1]+1] == kingdom_of_thornspire.map[Player.coord[0]][Player.coord[1]]) and key == Controls["interact"]:
+                fight(Player, createBossKingshollow(Player))
+                if Player.hp <= 0:
+                    gameoverscreen()
+                    quit()
+                winscreen()

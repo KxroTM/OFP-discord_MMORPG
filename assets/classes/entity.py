@@ -48,7 +48,7 @@ class player(entity) :
             self.inventory.show_in_fight(player)
 
     def level_up(self) :
-        if self.xp >= self.level * 10 :
+        if self.xp >= self.level * 100 :
             self.level += 1
             self.xp = 0
             self.max_hp += 10
@@ -72,5 +72,7 @@ class mob(entity) :
         else :
             damage = self.atk - target.defense
             print(f'{self.name} vous a attaqué pour {damage} damage!')
+        if damage < 0 :
+            damage = 0
         target.hp -= damage
 
